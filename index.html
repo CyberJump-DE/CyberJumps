@@ -78,9 +78,8 @@
             will-change: transform, opacity;
         }
         
-        /* Оптимизированный прозрачный слой меню без задержек растрирования */
         .overlay.menu-transparent {
-            background: radial-gradient(circle at 50% 30%, rgba(15, 10, 35, 0.25) 0%, rgba(2, 2, 8, 0.6) 100%);
+            background: radial-gradient(circle at 50% 35%, rgba(15, 10, 35, 0.25) 0%, rgba(2, 2, 8, 0.65) 100%);
         }
 
         .hidden {
@@ -141,7 +140,7 @@
             transform: scale(0.95);
         }
 
-        /* --- UI ГЛАВНОГО МЕНЮ БЕЗ ЛАГОВ --- */
+        /* --- UI ГЛАВНОГО МЕНЮ --- */
         .menu-header-bar {
             position: absolute;
             top: 20px;
@@ -453,7 +452,7 @@
             </div>
 
             <div class="menu-controls-tip">
-                <span>[A / D]</span> ИЛИ <span>[◄ ►]</span> ДВИЖЕНИЕ • <span>[SPACE]</span> ОГОНЬ
+                <span>[A / D]</span> ДВИЖЕНИЕ • <span>[E]</span> ОГОНЬ • <span>[ENTER]</span> СТАРТ
             </div>
 
             <div class="main-menu-footer">
@@ -478,10 +477,12 @@
             </div>
         </div>
 
+        <!-- МЕНЮ ПАУЗЫ (6 КНОПОК) -->
         <div id="pauseMenu" class="overlay hidden">
             <div class="glass-card">
                 <h1>ПАУЗА</h1>
                 <button class="menu-btn" onclick="togglePause()">ПРОДОЛЖИТЬ</button>
+                <button class="menu-btn" onclick="goToMainMenu()" style="background: linear-gradient(90deg, #00f0ff, #0066ff); box-shadow: 0 0 20px rgba(0, 240, 255, 0.45); margin-bottom: 15px;">В МЕНЮ</button>
 
                 <div class="dev-panel">
                     <div class="dev-title">⚙️ DEV TOOLS / ЧИТЫ</div>
@@ -682,6 +683,30 @@ function togglePause() {
     }
 }
 
+// ПЕРЕХОД В ГЛАВНОЕ МЕНЮ ИЗ ПАУЗЫ
+function goToMainMenu() {
+    pauseMenu.classList.add('hidden');
+    topControls.style.display = 'none';
+    hud.style.display = 'none';
+    controlsLayer.style.display = 'none';
+    
+    gameState = 'MAIN_MENU';
+    mainMenu.classList.remove('hidden');
+
+    cameraY = 0;
+    cameraShake = 0;
+    player.trail = [];
+    bullets = [];
+    enemies = [];
+    springs = [];
+    powerups = [];
+    meteors = [];
+
+    if (menuHighScoreEl) {
+        menuHighScoreEl.innerText = highScore;
+    }
+}
+
 // --- ВСЕЛЕННАЯ И АТМОСФЕРА ---
 let bgBuildingsFar = [];
 let bgBuildingsNear = [];
@@ -692,8 +717,6 @@ let meteors = [];
 let texturedMeteors = [];
 let satellites = [];
 let giantStars = [];
-
-// Дополнительные легкие неоновые искры меню
 let menuSparks = [];
 
 function generateWorldAssets() {
@@ -1001,25 +1024,59 @@ function addFloatingText(text, x, y, color = '#ffff00') {
     floatingTexts.push({ text, x, y, vy: -1.5, alpha: 1.0, color });
 }
 
+// --- УПРАВЛЕНИЕ: КЛАВИАТУРА ДЛЯ ПК + ТЕЛЕФОН ---
 function setupInput() {
     window.addEventListener('keydown', (e) => {
-        if (['Escape', 'p', 'P', 'З', 'з'].includes(e.key)) togglePause();
+        // [Enter] в главном меню автоматически запускает игру
+        if (gameState === 'MAIN_MENU' && (e.key === 'Enter' || e.code === 'Enter' || e.code === 'NumpadEnter')) {
+            startFromMainMenu();
+            return;
+        }
+
+        // [Escape] открывает меню паузы с 6 кнопками
+        if (e.key === 'Escape' || e.code === 'Escape' || ['p', 'P', 'З', 'з'].includes(e.key)) {
+            togglePause();
+        }
+
         if (gameState !== 'PLAYING') return;
 
-        if (['ArrowLeft', 'a', 'А'].includes(e.key)) keys.left = true;
-        if (['ArrowRight', 'd', 'В'].includes(e.key)) keys.right = true;
-        if (['ArrowUp', 'w', 'W'].includes(e.key)) keys.up = true;
-        if (['ArrowDown', 's', 'Ы'].includes(e.key)) keys.down = true;
-        if ([' '].includes(e.key)) shoot();
+        // [A] или Стрелка влево
+        if (e.code === 'KeyA' || e.key === 'ArrowLeft' || ['a', 'A', 'ф', 'Ф'].includes(e.key)) {
+            keys.left = true;
+        }
+        // [D] или Стрелка вправо
+        if (e.code === 'KeyD' || e.key === 'ArrowRight' || ['d', 'D', 'в', 'В'].includes(e.key)) {
+            keys.right = true;
+        }
+        // Вверх/Вниз для Dev Noclip
+        if (e.code === 'KeyW' || e.key === 'ArrowUp' || ['w', 'W', 'ц', 'Ц'].includes(e.key)) {
+            keys.up = true;
+        }
+        if (e.code === 'KeyS' || e.key === 'ArrowDown' || ['s', 'S', 'ы', 'Ы'].includes(e.key)) {
+            keys.down = true;
+        }
+        // [E] или [Space] — стрельба
+        if (e.code === 'KeyE' || e.code === 'Space' || e.key === ' ' || ['e', 'E', 'у', 'У'].includes(e.key)) {
+            shoot();
+        }
     });
 
     window.addEventListener('keyup', (e) => {
-        if (['ArrowLeft', 'a', 'А'].includes(e.key)) keys.left = false;
-        if (['ArrowRight', 'd', 'В'].includes(e.key)) keys.right = false;
-        if (['ArrowUp', 'w', 'W'].includes(e.key)) keys.up = false;
-        if (['ArrowDown', 's', 'Ы'].includes(e.key)) keys.down = false;
+        if (e.code === 'KeyA' || e.key === 'ArrowLeft' || ['a', 'A', 'ф', 'Ф'].includes(e.key)) {
+            keys.left = false;
+        }
+        if (e.code === 'KeyD' || e.key === 'ArrowRight' || ['d', 'D', 'в', 'В'].includes(e.key)) {
+            keys.right = false;
+        }
+        if (e.code === 'KeyW' || e.key === 'ArrowUp' || ['w', 'W', 'ц', 'Ц'].includes(e.key)) {
+            keys.up = false;
+        }
+        if (e.code === 'KeyS' || e.key === 'ArrowDown' || ['s', 'S', 'ы', 'Ы'].includes(e.key)) {
+            keys.down = false;
+        }
     });
 
+    // Управление для сенсорных экранов смартфонов
     const bindTouch = (id, startFn, endFn) => {
         const btn = document.getElementById(id);
         btn.addEventListener('touchstart', (e) => { e.preventDefault(); startFn(); });
@@ -1063,7 +1120,6 @@ function update() {
     animTicks++;
 
     if (gameState === 'MAIN_MENU') {
-        // Динамический космос в меню
         if (Math.random() < 0.04) {
             meteors.push({
                 x: Math.random() * canvas.width * 1.2 - 50,
@@ -1100,7 +1156,6 @@ function update() {
         });
         texturedMeteors = texturedMeteors.filter(tm => tm.life > 0);
 
-        // Всплывающие частицы пыли в меню
         if (Math.random() < 0.25) {
             particles.push({
                 x: Math.random() * canvas.width,
@@ -1117,12 +1172,15 @@ function update() {
         particles = particles.filter(p => p.life > 0);
 
         // Искры пьедестала
-        if (Math.random() < 0.3) {
+        const platW = 150;
+        const platX = canvas.width / 2 - platW / 2;
+        const platY = canvas.height * 0.68;
+        if (Math.random() < 0.28) {
             menuSparks.push({
-                x: canvas.width / 2 + (Math.random() - 0.5) * 120,
-                y: canvas.height * 0.68 + 10,
-                vx: (Math.random() - 0.5) * 0.6,
-                vy: -Math.random() * 1.5 - 0.8,
+                x: platX + 12 + Math.random() * (platW - 24),
+                y: platY + 16,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: -Math.random() * 1.4 - 0.6,
                 size: Math.random() * 2 + 1,
                 alpha: 1.0,
                 color: Math.random() > 0.4 ? '#00f0ff' : '#ff00aa'
@@ -1131,11 +1189,10 @@ function update() {
         menuSparks.forEach(s => {
             s.x += s.vx;
             s.y += s.vy;
-            s.alpha -= 0.02;
+            s.alpha -= 0.022;
         });
         menuSparks = menuSparks.filter(s => s.alpha > 0);
 
-        // Вращение спутников
         cosmicPlanets.forEach(pl => {
             if (pl.satellites) pl.satellites.forEach(sat => sat.angle += sat.speed);
         });
@@ -1168,7 +1225,6 @@ function update() {
 
     if (gameState !== 'PLAYING') return;
 
-    // Быстрые Метеоры
     if (maxScore > 300 && Math.random() < 0.025) {
         meteors.push({
             x: Math.random() * canvas.width * 1.2 - 50,
@@ -1187,7 +1243,6 @@ function update() {
     });
     meteors = meteors.filter(m => m.life > 0);
 
-    // Текстурированные медленные метеоры
     if (maxScore > 150 && Math.random() < 0.04) {
         const size = 16 + Math.random() * 28;
         texturedMeteors.push({
@@ -1216,7 +1271,6 @@ function update() {
     });
     texturedMeteors = texturedMeteors.filter(tm => tm.life > 0);
 
-    // Вращение спутников планет
     cosmicPlanets.forEach(pl => {
         if (pl.satellites) {
             pl.satellites.forEach(sat => {
@@ -1225,7 +1279,6 @@ function update() {
         }
     });
 
-    // Спутники станции
     satellites.forEach(s => {
         s.x += s.speed;
         if (s.x > canvas.width + 50) s.x = -50;
@@ -1236,7 +1289,6 @@ function update() {
 
     if (cameraShake > 0) cameraShake *= 0.88;
 
-    // OBSERVER NOCLIP
     if (devState.noclip) {
         const flySpeed = 12;
         player.vx = 0;
@@ -1641,11 +1693,11 @@ function drawCRTBoot() {
     ctx.restore();
 }
 
-// --- ВЫСОКОПРОИЗВОДИТЕЛЬНАЯ ОТРИСОВКА ГЛАВНОГО МЕНЮ ---
+// --- ОТРИСОВКА ГЛАВНОГО МЕНЮ ---
 function drawMainMenu() {
     ctx.save();
 
-    // 1. Глубокий градиент неба
+    // 1. Глубокий космос
     const skyGrad = ctx.createLinearGradient(0, 0, 0, canvas.height);
     skyGrad.addColorStop(0, '#020210');
     skyGrad.addColorStop(0.5, '#06051c');
@@ -1653,7 +1705,7 @@ function drawMainMenu() {
     ctx.fillStyle = skyGrad;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // 2. Туманности с аппаратным аддитивным свечением (без лагов)
+    // 2. Туманности
     ctx.globalCompositeOperation = 'lighter';
     cosmicNebulae.forEach(neb => {
         const grad = ctx.createRadialGradient(neb.x, neb.worldY + 2000, 5, neb.x, neb.worldY + 2000, neb.radius);
@@ -1678,7 +1730,6 @@ function drawMainMenu() {
     const planetY = canvas.height * 0.26;
     drawPlanet(cosmicPlanets[0], planetY);
 
-    // Орбитальные радары
     ctx.save();
     ctx.translate(cosmicPlanets[0].x, planetY);
     ctx.strokeStyle = 'rgba(0, 240, 255, 0.3)';
@@ -1708,7 +1759,6 @@ function drawMainMenu() {
 
     texturedMeteors.forEach(tm => drawTexturedMeteor(tm, tm.y));
 
-    // Частицы космической пыли
     particles.forEach(p => {
         ctx.fillStyle = p.color;
         ctx.globalAlpha = p.life;
@@ -1716,56 +1766,78 @@ function drawMainMenu() {
     });
     ctx.globalAlpha = 1.0;
 
-    // 6. Кибернетическая сетка перспективы у основания меню
-    const platY = canvas.height * 0.68;
+    // 6. Платформа
+    const platY = Math.round(canvas.height * 0.68);
     const platW = 150;
     const platH = 16;
-    const platX = canvas.width / 2 - platW / 2;
+    const platX = Math.round(canvas.width / 2 - platW / 2);
 
-    ctx.strokeStyle = 'rgba(0, 240, 255, 0.08)';
+    // Сглаженная кибернетическая сетка (без визуальных разрывов)
+    ctx.save();
+    const vpX = canvas.width / 2;
+    const vpY = platY + platH;
+    const gridGrad = ctx.createLinearGradient(0, vpY, 0, canvas.height);
+    gridGrad.addColorStop(0, 'rgba(0, 240, 255, 0.02)');
+    gridGrad.addColorStop(0.45, 'rgba(0, 240, 255, 0.08)');
+    gridGrad.addColorStop(1, 'rgba(0, 240, 255, 0.01)');
+    ctx.strokeStyle = gridGrad;
     ctx.lineWidth = 1;
-    const gridLines = 8;
+
+    const gridLines = 10;
     for (let i = 0; i <= gridLines; i++) {
         const gx = (canvas.width / gridLines) * i;
         ctx.beginPath();
         ctx.moveTo(gx, canvas.height);
-        ctx.lineTo(canvas.width / 2 + (gx - canvas.width / 2) * 0.2, platY + platH);
+        ctx.lineTo(vpX + (gx - vpX) * 0.22, vpY);
         ctx.stroke();
     }
-    for (let h = platY + platH + 15; h < canvas.height; h += 22) {
+    for (let h = vpY + 14; h < canvas.height; h += 20) {
+        const progress = (h - vpY) / (canvas.height - vpY);
+        const span = (canvas.width * 0.25) + progress * (canvas.width * 0.75);
         ctx.beginPath();
-        ctx.moveTo(0, h);
-        ctx.lineTo(canvas.width, h);
+        ctx.moveTo(vpX - span / 2, h);
+        ctx.lineTo(vpX + span / 2, h);
         ctx.stroke();
     }
+    ctx.restore();
 
-    // 7. Голографический световой луч (аддитивный блум)
+    // 7. Световой луч (строго по размеру платформы)
     ctx.globalCompositeOperation = 'lighter';
-    const beamGrad = ctx.createLinearGradient(0, platY, 0, canvas.height);
-    beamGrad.addColorStop(0, 'rgba(0, 240, 255, 0.25)');
-    beamGrad.addColorStop(0.5, 'rgba(122, 0, 255, 0.08)');
+    const beamGrad = ctx.createLinearGradient(0, platY + platH, 0, canvas.height);
+    beamGrad.addColorStop(0, 'rgba(0, 240, 255, 0.28)');
+    beamGrad.addColorStop(0.35, 'rgba(0, 200, 255, 0.12)');
+    beamGrad.addColorStop(0.7, 'rgba(122, 0, 255, 0.04)');
     beamGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
     ctx.fillStyle = beamGrad;
     ctx.beginPath();
-    ctx.moveTo(platX - 25, platY + platH);
-    ctx.lineTo(platX + platW + 25, platY + platH);
-    ctx.lineTo(platX + platW + 65, canvas.height);
-    ctx.lineTo(platX - 65, canvas.height);
+    ctx.moveTo(platX, platY + platH);
+    ctx.lineTo(platX + platW, platY + platH);
+    ctx.lineTo(platX + platW + 28, canvas.height);
+    ctx.lineTo(platX - 28, canvas.height);
     ctx.closePath();
     ctx.fill();
 
-    // Сканирующие кольца
-    const ringScanY = platY + 12 + ((animTicks * 1.6) % 75);
-    const ringProgress = (ringScanY - (platY + 12)) / 75;
-    const ringAlpha = (1 - ringProgress) * 0.6;
+    // Мягкое свечение под платформой
+    const underGlow = ctx.createRadialGradient(canvas.width / 2, platY + platH, 2, canvas.width / 2, platY + platH, platW / 2);
+    underGlow.addColorStop(0, 'rgba(0, 240, 255, 0.35)');
+    underGlow.addColorStop(0.7, 'rgba(0, 240, 255, 0.08)');
+    underGlow.addColorStop(1, 'rgba(0, 240, 255, 0)');
+    ctx.fillStyle = underGlow;
+    ctx.fillRect(platX, platY + platH, platW, 25);
+
+    // Сканирующие эллипсы
+    const ringScanY = platY + platH + ((animTicks * 1.5) % 65);
+    const ringProgress = (ringScanY - (platY + platH)) / 65;
+    const ringAlpha = (1 - ringProgress) * 0.55;
+    const currentRingRadius = (platW / 2 - 12) + ringProgress * 14;
     ctx.strokeStyle = `rgba(0, 240, 255, ${ringAlpha})`;
     ctx.lineWidth = 1.5;
     ctx.beginPath();
-    ctx.ellipse(canvas.width / 2, ringScanY, 60 + ringProgress * 30, 7, 0, 0, Math.PI * 2);
+    ctx.ellipse(canvas.width / 2, ringScanY, currentRingRadius, 6, 0, 0, Math.PI * 2);
     ctx.stroke();
 
-    // Восходящие искры
+    // Искры
     menuSparks.forEach(s => {
         ctx.fillStyle = s.color;
         ctx.globalAlpha = s.alpha;
@@ -1774,17 +1846,16 @@ function drawMainMenu() {
     ctx.globalAlpha = 1.0;
     ctx.globalCompositeOperation = 'source-over';
 
-    // 8. Пьедестал
+    // 8. Корпус платформы
     ctx.fillStyle = '#0a0a20';
     ctx.fillRect(platX, platY, platW, platH);
 
     ctx.fillStyle = '#00f0ff';
     ctx.fillRect(platX, platY, platW, 4);
 
-    // Дополнительное неоновое ребро
     ctx.globalCompositeOperation = 'lighter';
-    ctx.fillStyle = 'rgba(0, 240, 255, 0.4)';
-    ctx.fillRect(platX - 4, platY - 1, platW + 8, 6);
+    ctx.fillStyle = 'rgba(0, 240, 255, 0.35)';
+    ctx.fillRect(platX, platY, platW, 4);
     ctx.globalCompositeOperation = 'source-over';
 
     const pulseLight = (Math.sin(animTicks * 0.1) + 1) * 0.5;
@@ -1792,23 +1863,26 @@ function drawMainMenu() {
     ctx.fillRect(platX + 4, platY + 6, 6, platH - 8);
     ctx.fillRect(platX + platW - 10, platY + 6, 6, platH - 8);
 
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
-    for (let i = platX + 18; i < platX + platW - 16; i += 16) {
-        ctx.fillRect(i, platY + 6, 2, platH - 8);
+    // Центрированные слоты платформы
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.16)';
+    const slotCount = 7;
+    const startX = platX + 18;
+    const slotStep = (platW - 36) / (slotCount - 1);
+    for (let i = 0; i < slotCount; i++) {
+        ctx.fillRect(Math.round(startX + i * slotStep), platY + 6, 2, platH - 8);
     }
 
-    // 9. Персонаж с Idle-анимацией
+    // 9. Персонаж
     const idleOffset = Math.sin(animTicks * 0.08) * 3;
-    const charX = canvas.width / 2 - player.width / 2;
-    const charY = platY - player.height + idleOffset;
+    const charX = Math.round(canvas.width / 2 - player.width / 2);
+    const charY = Math.round(platY - player.height + idleOffset);
 
-    // Тень под персонажем
+    const shadowR = Math.max(8, 12 + idleOffset * 1.2);
     ctx.fillStyle = 'rgba(0, 240, 255, 0.25)';
     ctx.beginPath();
-    ctx.ellipse(canvas.width / 2, platY + 2, 14 - idleOffset, 4, 0, 0, Math.PI * 2);
+    ctx.ellipse(canvas.width / 2, platY + 2, shadowR, 4, 0, 0, Math.PI * 2);
     ctx.fill();
 
-    // Неоновый силуэт персонажа
     ctx.fillStyle = '#00f0ff';
     ctx.fillRect(charX, charY, player.width, player.height);
 
@@ -1817,11 +1891,9 @@ function drawMainMenu() {
     ctx.fillRect(charX - 2, charY - 2, player.width + 4, player.height + 4);
     ctx.globalCompositeOperation = 'source-over';
 
-    // Визор персонажа
     ctx.fillStyle = '#030310';
     ctx.fillRect(charX + player.width - 11, charY + 7, 9, 7);
 
-    // Бегущий сканирующий луч визора
     const eyeGlint = ((animTicks % 35) / 35) * 7;
     ctx.fillStyle = '#00ff88';
     ctx.fillRect(charX + player.width - 11 + eyeGlint, charY + 9, 2, 3);
