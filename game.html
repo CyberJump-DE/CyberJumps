@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cyber Jump: Авторизация</title>
+    <!-- Официальная библиотека Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap');
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #020206;
+            font-family: 'Orbitron', sans-serif;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #bgCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            display: block;
+            pointer-events: none;
+        }
+
+        .crt-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none !important;
+            z-index: 2;
+            background: 
+                linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.28) 50%),
+                radial-gradient(circle, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.82) 100%);
+            background-size: 100% 4px, 100% 100%;
+            opacity: 0.8;
+        }
+
+        .auth-container {
+            position: relative;
+            z-index: 10;
+            width: 92%;
+            max-width: 430px;
+            pointer-events: auto;
+        }
+
+        /* Строгая монолитная панель */
+        .auth-card {
+            position: relative;
+            background: 
+                radial-gradient(circle at 50% -10%, rgba(0, 240, 255, 0.14) 0%, transparent 60%),
+                repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.012) 0px, rgba(255, 255, 255, 0.012) 1px, transparent 1px, transparent 4px),
+                linear-gradient(175deg, #10131d 0%, #080911 50%, #030407 100%);
+            border: 1px solid rgba(0, 240, 255, 0.35);
+            border-radius: 20px;
+            padding: 32px 26px 28px;
+            box-shadow: 
+                0 25px 60px rgba(0, 0, 0, 0.95),
+                0 0 30px rgba(0, 240, 255, 0.1),
+                inset 0 1px 1px rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        /* Угловые маркеры */
+        .auth-card::before, .auth-card::after {
+            content: '';
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            border-color: rgba(0, 240, 255, 0.6);
+            pointer-events: none;
+        }
+        .auth-card::before {
+            top: 10px;
+            left: 10px;
+            border-top: 1.5px solid rgba(0, 240, 255, 0.6);
+            border-left: 1.5px solid rgba(0, 240, 255, 0.6);
+        }
+        .auth-card::after {
+            bottom: 10px;
+            right: 10px;
+            border-bottom: 1.5px solid rgba(0, 240, 255, 0.6);
+            border-right: 1.5px solid rgba(0, 240, 255, 0.6);
+        }
+
+        /* Лаконичный статус подключения */
+        .system-status-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 6px 12px;
+            margin-bottom: 22px;
+        }
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
+            color: #8c96b0;
+            letter-spacing: 1px;
+        }
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #00ff88;
+            box-shadow: 0 0 6px #00ff88;
+        }
+        .system-code {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 10px;
+            color: #5d6785;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            background: linear-gradient(180deg, #ffffff 0%, #d8e5ff 60%, #8ca6db 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: #697391;
+            margin-bottom: 26px;
+            text-transform: uppercase;
+        }
+
+        /* Строгая кнопка входа Google */
+        .google-auth-btn {
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: linear-gradient(145deg, #0e1220 0%, #060810 100%);
+            border: 1px solid rgba(0, 240, 255, 0.35);
+            border-radius: 10px;
+            padding: 14px 18px;
+            color: #ffffff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.2s ease;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+            touch-action: manipulation;
+        }
+
+        .google-auth-btn:hover {
+            border-color: #00f0ff;
+            background: linear-gradient(145deg, #141a30 0%, #090c17 100%);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .google-auth-btn:active {
+            transform: scale(0.98);
+        }
+
+        .google-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        /* Системный логгер */
+        .terminal-log {
+            margin-top: 20px;
+            padding: 12px 14px;
+            background: rgba(0, 0, 0, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
+            color: #00f0ff;
+            letter-spacing: 1px;
+            text-align: left;
+            min-height: 42px;
+            display: flex;
+            align-items: center;
+            word-break: break-word;
+        }
+
+        .terminal-log::before {
+            content: '>';
+            color: #8c96b0;
+            margin-right: 8px;
+            font-weight: bold;
+        }
+
+        .auth-footer-links {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
+            color: #5d5d85;
+            letter-spacing: 1px;
+        }
+
+        .auth-btn-link {
+            color: #7985a6;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: inherit;
+            letter-spacing: inherit;
+            padding: 6px 10px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            touch-action: manipulation;
+        }
+
+        .auth-btn-link.guest-highlight {
+            color: #d8e5ff;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .auth-btn-link.guest-highlight:hover {
+            color: #00f0ff;
+            border-color: rgba(0, 240, 255, 0.4);
+            background: rgba(0, 240, 255, 0.1);
+        }
+
+        .auth-btn-link:hover {
+            color: #00f0ff;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="bgCanvas"></canvas>
+    <div class="crt-overlay"></div>
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <!-- Системный статус соединения -->
+            <div class="system-status-bar">
+                <div class="status-indicator">
+                    <div class="status-dot"></div>
+                    <span>СЕТЬ АКТИВНА</span>
+                </div>
+                <div class="system-code">v2.026 // SSL</div>
+            </div>
+
+            <h1>ВХОД В АККАУНТ</h1>
+            <div class="subtitle">СИНХРОНИЗАЦИЯ ПРОГРЕССА И РЕКОРДОВ</div>
+
+            <!-- Кнопка входа Google -->
+            <button class="google-auth-btn" id="btnGoogleAuth" onclick="handleGoogleSignIn()">
+                <svg class="google-icon" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+                    <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+                    <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+                    <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+                </svg>
+                ВОЙТИ ЧЕРЕЗ GOOGLE
+            </button>
+
+            <div class="terminal-log" id="terminalStatus">
+                Готов к подключению учетной записи
+            </div>
+
+            <div class="auth-footer-links">
+                <button class="auth-btn-link guest-highlight" id="btnGuest" onclick="guestSignIn()">[ ПРОДОЛЖИТЬ БЕЗ ВХОДА ► ]</button>
+                <button class="auth-btn-link" id="btnStatus" onclick="serverStatus()">[ СТАТУС СЕРВЕРА ]</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+const GOOGLE_CLIENT_ID = '706751433805-1r56qodllbmsqcg6hfcs8kk99vrgio34.apps.googleusercontent.com';
+let googleTokenClient = null;
+const terminalEl = document.getElementById('terminalStatus');
+
+let audioCtx = null;
+function playSound(type) {
+    try {
+        if (!audioCtx) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new AudioContext();
+        }
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        if (type === 'beep') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(750, now);
+            osc.frequency.exponentialRampToValueAtTime(1100, now + 0.07);
+            gain.gain.setValueAtTime(0.08, now);
+            gain.gain.linearRampToValueAtTime(0.01, now + 0.07);
+            osc.start(now); osc.stop(now + 0.07);
+        } else if (type === 'auth') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(520, now);
+            osc.frequency.linearRampToValueAtTime(880, now + 0.18);
+            gain.gain.setValueAtTime(0.12, now);
+            gain.gain.linearRampToValueAtTime(0.01, now + 0.18);
+            osc.start(now); osc.stop(now + 0.18);
+        }
+    } catch(e) {}
+}
+
+function initGoogleClient() {
+    try {
+        if (window.google && google.accounts && google.accounts.oauth2) {
+            googleTokenClient = google.accounts.oauth2.initTokenClient({
+                client_id: GOOGLE_CLIENT_ID,
+                scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
+                callback: async (tokenResponse) => {
+                    if (tokenResponse && tokenResponse.access_token) {
+                        terminalEl.style.color = '#ffd700';
+                        terminalEl.innerText = 'Токен подтвержден. Загрузка данных...';
+                        try {
+                            const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                                headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
+                            });
+                            const profile = await res.json();
+                            const userData = {
+                                name: profile.name || 'Пользователь Google',
+                                email: profile.email || '',
+                                picture: profile.picture || '',
+                                authType: 'google'
+                            };
+                            localStorage.setItem('cyber_jump_user', JSON.stringify(userData));
+                            finishLogin(userData.name);
+                        } catch (err) {
+                            finishLogin('Пользователь Google');
+                        }
+                    }
+                },
+                error_callback: (err) => {
+                    terminalEl.style.color = '#ff4d6d';
+                    terminalEl.innerText = `Ошибка авторизации: ${err.type || err.message || 'Окно закрыто'}`;
+                }
+            });
+        }
+    } catch (e) {}
+}
+
+window.addEventListener('load', () => {
+    initGoogleClient();
+    setTimeout(initGoogleClient, 1000);
+});
+
+function handleGoogleSignIn() {
+    playSound('beep');
+
+    if (window.location.protocol === 'file:') {
+        terminalEl.style.color = '#ffaa00';
+        terminalEl.innerText = 'Запуск через file:// не поддерживается. Откройте страницу через веб-сервер (http://localhost:8080)';
+        return;
+    }
+
+    if (!googleTokenClient) {
+        initGoogleClient();
+    }
+
+    if (!googleTokenClient) {
+        terminalEl.style.color = '#ff4d6d';
+        terminalEl.innerText = 'Модуль Google недоступен. Проверьте соединение с сетью';
+        return;
+    }
+
+    terminalEl.style.color = '#00f0ff';
+    terminalEl.innerText = 'Ожидание подтверждения в окне Google...';
+    try {
+        googleTokenClient.requestAccessToken({ prompt: 'consent' });
+    } catch(err) {
+        terminalEl.style.color = '#ff4d6d';
+        terminalEl.innerText = 'Всплывающее окно заблокировано браузером';
+    }
+}
+
+function finishLogin(name) {
+    playSound('auth');
+    terminalEl.style.color = '#00ff88';
+    terminalEl.innerText = `Вход выполнен: ${name}`;
+    const btn = document.getElementById('btnGoogleAuth');
+    btn.style.borderColor = '#00ff88';
+    btn.style.color = '#00ff88';
+    btn.innerText = '✓ ВХОД ВЫПОЛНЕН';
+
+    setTimeout(() => {
+        window.location.href = 'game.html';
+    }, 600);
+}
+
+function guestSignIn() {
+    playSound('beep');
+    terminalEl.style.color = '#00f0ff';
+    terminalEl.innerText = 'Вход без сохранения. Загрузка...';
+
+    localStorage.setItem('cyber_jump_user', JSON.stringify({
+        name: 'Гость',
+        authType: 'guest'
+    }));
+
+    setTimeout(() => {
+        window.location.href = 'game.html';[span_1](start_span)[span_1](end_span)
+    }, 200);
+}
+
+function serverStatus() {
+    playSound('beep');
+    terminalEl.style.color = '#00ff88';
+    terminalEl.innerText = `Сервер синхронизации онлайн // Пинг: 12ms`;
+}
+
+// ==========================================
+// ГЛУБОКИЙ ОБЪЕМНЫЙ CANVAS КОСМОС (60 FPS)
+// ==========================================
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+
+let animTicks = 0;
+let stars = [];
+let giantStars = [];
+let cosmicNebulae = [];
+let particles = [];
+
+function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    initCosmos();
+}
+
+function initCosmos() {
+    stars = [];
+    particles = [];
+
+    for (let i = 0; i < 220; i++) {
+        stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() > 0.88 ? 2.5 : (Math.random() > 0.45 ? 1.6 : 1),
+            color: Math.random() > 0.5 ? '#00f0ff' : (Math.random() > 0.25 ? '#a8bfff' : '#ffffff'),
+            alpha: Math.random() * 0.85 + 0.15,
+            blinkSpeed: Math.random() * 0.03 + 0.01
+        });
+    }
+
+    giantStars = [
+        {
+            x: canvas.width * 0.15,
+            y: canvas.height * 0.2,
+            radius: 48,
+            coreColor: '#ffffff',
+            coronaColor: 'rgba(0, 240, 255, 0.35)',
+            pulseSpeed: 0.02
+        },
+        {
+            x: canvas.width * 0.85,
+            y: canvas.height * 0.28,
+            radius: 64,
+            coreColor: '#f0f5ff',
+            coronaColor: 'rgba(120, 160, 255, 0.3)',
+            pulseSpeed: 0.024
+        },
+        {
+            x: canvas.width * 0.65,
+            y: canvas.height * 0.82,
+            radius: 44,
+            coreColor: '#fff5df',
+            coronaColor: 'rgba(255, 160, 80, 0.25)',
+            pulseSpeed: 0.03
+        }
+    ];
+
+    cosmicNebulae = [
+        { x: canvas.width * 0.2, y: canvas.height * 0.25, radius: 320, color: 'rgba(0, 240, 255, ' },
+        { x: canvas.width * 0.82, y: canvas.height * 0.32, radius: 360, color: 'rgba(80, 120, 255, ' },
+        { x: canvas.width * 0.5, y: canvas.height * 0.75, radius: 420, color: 'rgba(100, 60, 200, ' }
+    ];
+
+    for (let i = 0; i < 60; i++) {
+        particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.4,
+            vy: -Math.random() * 0.5 - 0.2,
+            size: Math.random() * 2.2 + 1,
+            color: Math.random() > 0.5 ? '#00f0ff' : '#9bb5ff',
+            alpha: Math.random() * 0.6 + 0.2
+        });
+    }
+}
+
+function renderCosmos() {
+    animTicks++;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const bgGrad = ctx.createRadialGradient(
+        canvas.width / 2, canvas.height / 2, 40,
+        canvas.width / 2, canvas.height / 2, Math.max(canvas.width, canvas.height) * 0.88
+    );
+    bgGrad.addColorStop(0, '#040612');
+    bgGrad.addColorStop(0.5, '#020308');
+    bgGrad.addColorStop(1, '#000003');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.globalCompositeOperation = 'lighter';
+    cosmicNebulae.forEach((neb, idx) => {
+        const driftX = Math.sin(animTicks * 0.003 + idx * 1.5) * 18;
+        const driftY = Math.cos(animTicks * 0.003 + idx * 1.5) * 14;
+        const grad = ctx.createRadialGradient(neb.x + driftX, neb.y + driftY, 5, neb.x + driftX, neb.y + driftY, neb.radius);
+        grad.addColorStop(0, neb.color + '0.22)');
+        grad.addColorStop(0.5, neb.color + '0.06)');
+        grad.addColorStop(1, neb.color + '0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(neb.x + driftX, neb.y + driftY, neb.radius, 0, Math.PI * 2);
+        ctx.fill();
+    });
+
+    giantStars.forEach(gs => {
+        const pulse = Math.sin(animTicks * gs.pulseSpeed) * 5;
+        const r = gs.radius + pulse;
+
+        const sGrad = ctx.createRadialGradient(gs.x, gs.y, 2, gs.x, gs.y, r);
+        sGrad.addColorStop(0, '#ffffff');
+        sGrad.addColorStop(0.35, gs.coreColor);
+        sGrad.addColorStop(0.8, gs.coronaColor);
+        sGrad.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = sGrad;
+        ctx.beginPath();
+        ctx.arc(gs.x, gs.y, r, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = gs.coronaColor;
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.moveTo(gs.x - r * 1.25, gs.y);
+        ctx.lineTo(gs.x + r * 1.25, gs.y);
+        ctx.moveTo(gs.x, gs.y - r * 1.25);
+        ctx.lineTo(gs.x, gs.y + r * 1.25);
+        ctx.stroke();
+    });
+    ctx.globalCompositeOperation = 'source-over';
+
+    stars.forEach(st => {
+        ctx.fillStyle = st.color;
+        ctx.globalAlpha = st.alpha * (0.8 + Math.sin(animTicks * st.blinkSpeed) * 0.2);
+        ctx.fillRect(st.x, st.y, st.size, st.size);
+    });
+    ctx.globalAlpha = 1.0;
+
+    ctx.globalCompositeOperation = 'lighter';
+    particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.y < -10) p.y = canvas.height + 10;
+        if (p.x < -10) p.x = canvas.width + 10;
+        if (p.x > canvas.width + 10) p.x = -10;
+
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.alpha;
+        ctx.fillRect(p.x, p.y, p.size, p.size);
+    });
+    ctx.globalAlpha = 1.0;
+    ctx.globalCompositeOperation = 'source-over';
+
+    requestAnimationFrame(renderCosmos);
+}
+
+window.addEventListener('resize', resize);
+resize();
+renderCosmos();
+</script>
+</body>
+</html>
