@@ -95,39 +95,39 @@
             background: linear-gradient(135deg, rgba(22, 22, 54, 0.96), rgba(8, 8, 26, 0.98));
             border: 2px solid rgba(0, 240, 255, 0.7);
             border-radius: 24px;
-            padding: 24px 20px;
+            padding: 22px 18px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 240, 255, 0.3);
             text-align: center;
-            width: 90%;
-            max-width: 460px;
-            max-height: 90vh;
+            width: 92%;
+            max-width: 480px;
+            max-height: 92vh;
             overflow-y: auto;
             transform: translateZ(0);
         }
 
         h1 {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 900;
             background: linear-gradient(45deg, #00f0ff, #ff0077, #ffff00);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             filter: drop-shadow(0 0 12px rgba(0, 240, 255, 0.8));
         }
 
         p.subtitle {
             font-size: 10px;
             color: #8c8cb8;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             letter-spacing: 2px;
             text-transform: uppercase;
         }
 
         .menu-btn {
             width: 100%;
-            padding: 14px;
+            padding: 13px;
             font-family: 'Orbitron', sans-serif;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 900;
             color: #fff;
             background: linear-gradient(90deg, #ff0055, #7a00ff);
@@ -137,7 +137,7 @@
             cursor: pointer;
             text-transform: uppercase;
             transition: transform 0.15s ease;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
         .menu-btn:active {
             transform: scale(0.95);
@@ -167,7 +167,7 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6), 0 0 12px rgba(0, 240, 255, 0.25);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             transform: translateZ(0);
         }
         .menu-badge-dot {
@@ -286,28 +286,138 @@
             border-left: 3px solid #ff0077;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5), 0 0 15px rgba(255, 0, 119, 0.4);
         }
-        .cyber-action-btn.skin-btn:hover {
+        .cyber-action-btn.settings-btn {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.85), rgba(0, 102, 255, 0.9));
+            border-left: 3px solid #00f0ff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5), 0 0 15px rgba(0, 240, 255, 0.4);
+        }
+        .cyber-action-btn:hover {
             transform: translateY(-2px) scale(1.01) translateZ(0);
-            box-shadow: 0 6px 25px rgba(0,0,0,0.7), 0 0 25px rgba(255, 0, 119, 0.7);
         }
         .cyber-action-btn:active {
             transform: scale(0.96) translateZ(0);
         }
 
-        .cyber-action-btn.disabled {
-            background: rgba(12, 12, 26, 0.85);
+        /* --- СТИЛИ ОКНА ВЫБОРА РЕЖИМА --- */
+        .mode-select-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 14px 0 16px 0;
+            width: 100%;
+        }
+        .mode-card {
+            position: relative;
+            background: linear-gradient(145deg, rgba(14, 18, 42, 0.95), rgba(6, 8, 22, 0.98));
+            border: 1.5px solid rgba(0, 240, 255, 0.45);
+            border-radius: 16px;
+            padding: 16px 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.22s ease;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+        }
+        .mode-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+            transition: 0.4s;
+        }
+        .mode-card:hover::before {
+            left: 100%;
+        }
+        .mode-card.mode-endless:hover {
+            border-color: #00f0ff;
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.45);
+            transform: translateY(-2px);
+        }
+        .mode-card.mode-story:hover {
+            border-color: #ff0077;
+            box-shadow: 0 0 25px rgba(255, 0, 119, 0.45);
+            transform: translateY(-2px);
+        }
+        .mode-card-icon {
+            font-size: 32px;
+            flex-shrink: 0;
+            width: 52px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.5);
             border: 1px solid rgba(255, 255, 255, 0.15);
-            color: #555577;
-            cursor: not-allowed;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+        }
+        .mode-card-info {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        .mode-card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            color: #ffffff;
+        }
+        .mode-endless .mode-card-title { color: #00f0ff; }
+        .mode-story .mode-card-title { color: #ff0077; }
+        .mode-card-desc {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 10.5px;
+            color: #9aa8cf;
+            line-height: 1.4;
+        }
+        .mode-card-tag {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 9.5px;
+            letter-spacing: 1px;
+            color: #00f0ff;
+            margin-top: 4px;
+            display: inline-block;
         }
 
-        /* --- КАСТОМИЗАЦИЯ И ВКЛАДКИ --- */
+        /* --- КАСТОМИЗАЦИЯ И НАСТРОЙКИ --- */
+        .wardrobe-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .crystal-balance-badge {
+            background: rgba(0, 240, 255, 0.12);
+            border: 1px solid rgba(0, 240, 255, 0.45);
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 12px;
+            color: #00f0ff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .dev-secret-btn {
+            background: rgba(255, 215, 0, 0.15);
+            border: 1px solid rgba(255, 215, 0, 0.5);
+            color: #ffd700;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
+            padding: 5px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
         .custom-section-title {
             font-size: 11px;
             color: #00f0ff;
             letter-spacing: 2px;
-            margin: 12px 0 8px 0;
+            margin: 10px 0 6px 0;
             text-align: left;
             font-weight: 700;
             display: flex;
@@ -320,27 +430,25 @@
             background: rgba(5, 5, 20, 0.7);
             border: 1px solid rgba(0, 240, 255, 0.3);
             border-radius: 14px;
-            padding: 12px;
-            margin-bottom: 12px;
+            padding: 10px;
+            margin-bottom: 10px;
         }
         .color-swatches-grid {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
             gap: 8px;
-            margin-bottom: 14px;
+            margin-bottom: 10px;
         }
         .color-chip {
             width: 100%;
-            height: 38px;
+            height: 34px;
             border-radius: 8px;
             cursor: pointer;
             border: 2px solid rgba(255, 255, 255, 0.2);
             transition: all 0.2s ease;
             box-shadow: 0 0 8px rgba(0,0,0,0.5);
         }
-        .color-chip:hover {
-            transform: scale(1.08);
-        }
+        .color-chip:hover { transform: scale(1.08); }
         .color-chip.active {
             border-color: #fff;
             transform: scale(1.12);
@@ -349,23 +457,21 @@
 
         .custom-tabs-nav {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
+            grid-template-columns: repeat(3, 1fr);
             gap: 6px;
-            margin: 12px 0 10px 0;
+            margin: 10px 0 8px 0;
         }
         .custom-tab-btn {
             background: rgba(10, 12, 28, 0.8);
             border: 1px solid rgba(0, 240, 255, 0.3);
             color: #7985a6;
             font-family: 'Share Tech Mono', monospace;
-            font-size: 10px;
-            padding: 8px 4px;
+            font-size: 11px;
+            padding: 9px 4px;
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s ease;
             white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
         .custom-tab-btn.active {
             background: rgba(0, 240, 255, 0.18);
@@ -374,53 +480,159 @@
             box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
             font-weight: bold;
         }
-        .custom-tab-btn.disabled {
-            opacity: 0.45;
-            cursor: not-allowed;
-            border-color: rgba(255, 255, 255, 0.1);
-        }
 
         .items-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 8px;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
         .item-slot {
             position: relative;
-            height: 54px;
+            height: 56px;
             background: rgba(12, 12, 32, 0.75);
             border: 1px dashed rgba(0, 240, 255, 0.35);
             border-radius: 10px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
-            opacity: 0.5;
-            cursor: not-allowed;
+            font-size: 20px;
+            cursor: pointer;
             transition: all 0.2s ease;
+        }
+        .item-slot.locked {
+            opacity: 0.75;
+            background: rgba(8, 8, 22, 0.6);
+            border-color: rgba(255, 255, 255, 0.15);
         }
         .item-slot.available {
             opacity: 1;
-            cursor: pointer;
             border: 1.5px solid rgba(0, 240, 255, 0.65);
             background: rgba(18, 20, 48, 0.85);
         }
         .item-slot.available:hover {
-            transform: scale(1.06);
+            transform: scale(1.05);
             border-color: #00f0ff;
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.5);
         }
-        .item-slot.available.active {
+        .item-slot.active {
             border-color: #ffd700;
             background: rgba(255, 215, 0, 0.18);
-            box-shadow: 0 0 18px rgba(255, 215, 0, 0.65);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.65);
         }
-        .item-slot .lock-tag {
-            position: absolute;
-            bottom: 2px;
-            right: 4px;
-            font-size: 10px;
+        .item-price-tag {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 9px;
+            color: #00f0ff;
+            margin-top: 2px;
+        }
+
+        /* --- СТИЛИ НАСТРОЕК --- */
+        .settings-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 12, 28, 0.7);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 8px;
+        }
+        .settings-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
+            color: #c0d0f0;
+            letter-spacing: 1px;
+            text-align: left;
+        }
+        .settings-slider-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 55%;
+        }
+        .cyber-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            background: #0d1226;
+            border: 1px solid rgba(0, 240, 255, 0.4);
+            border-radius: 3px;
+            outline: none;
+        }
+        .cyber-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #00f0ff;
+            box-shadow: 0 0 8px #00f0ff;
+            cursor: pointer;
+        }
+        .slider-val {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
+            color: #00f0ff;
+            width: 32px;
+            text-align: right;
+        }
+
+        .gfx-tier-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .gfx-tier-btn {
+            padding: 12px 6px;
+            background: rgba(12, 16, 36, 0.75);
+            border: 1.5px solid rgba(0, 240, 255, 0.3);
+            border-radius: 10px;
+            color: #7d8bb0;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .gfx-tier-btn.active {
+            border-color: #00ff88;
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
+        }
+
+        .bind-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 12, 28, 0.7);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 8px;
+        }
+        .bind-btn {
+            min-width: 90px;
+            padding: 8px 12px;
+            background: #090c1a;
+            border: 1.5px solid rgba(0, 240, 255, 0.4);
+            border-radius: 8px;
+            color: #00f0ff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+            transition: all 0.2s;
+        }
+        .bind-btn.listening {
+            border-color: #ff0055;
+            background: rgba(255, 0, 85, 0.25);
+            color: #ffffff;
+            box-shadow: 0 0 15px #ff0055;
+            animation: pulse-dot 1s infinite alternate;
         }
 
         /* DEV TOOLS СТИЛИ */
@@ -430,13 +642,33 @@
             border-top: 1px dashed rgba(0, 240, 255, 0.4);
             text-align: left;
         }
+        .dev-title-wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
         .dev-title {
             font-size: 12px;
             color: #ffff00;
             letter-spacing: 1.5px;
-            margin-bottom: 12px;
-            text-align: center;
             font-weight: bold;
+        }
+        .dev-lock-btn {
+            background: rgba(255, 0, 85, 0.2);
+            border: 1px solid #ff0055;
+            color: #ff0055;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 10px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .dev-lock-btn.unlocked {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: #00ff88;
+            color: #00ff88;
         }
         .dev-grid {
             display: grid;
@@ -506,9 +738,12 @@
             border-radius: 14px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7), 0 0 15px rgba(0, 240, 255, 0.2);
             transform: translateZ(0);
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
         }
         .score-box {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 900;
             color: #00f0ff;
             text-shadow: 0 0 10px rgba(0,240,255,0.8);
@@ -517,6 +752,14 @@
             font-size: 9px;
             color: #ff00bb;
             letter-spacing: 1px;
+        }
+        .crystals-hud-box {
+            font-size: 11px;
+            color: #ffd700;
+            font-family: 'Share Tech Mono', monospace;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .controls-layer {
@@ -577,7 +820,8 @@
             <div class="menu-header-bar">
                 <div class="menu-badge">
                     <div class="menu-badge-dot"></div>
-                    <span>SYS: ONLINE // BEST: <strong id="menuHighScore" style="color:#fff;">0</strong> M</span>
+                    <span>BEST: <strong id="menuHighScore" style="color:#fff;">0</strong> M</span>
+                    <span style="color:#ffd700;">💎 <strong id="menuTotalCrystals" style="color:#fff;">0</strong></span>
                 </div>
                 <div class="icon-btn" id="menuSoundToggle" title="Звук">🔊</div>
             </div>
@@ -587,7 +831,7 @@
                 <div class="cyber-subtag">DEEP COSMOS // v2.026</div>
             </div>
 
-            <div class="menu-controls-tip">
+            <div class="menu-controls-tip" id="mainMenuControlsTip">
                 <span>[A / D]</span> ДВИЖЕНИЕ • <span>[E]</span> ОГОНЬ • <span>[ENTER]</span> СТАРТ
             </div>
 
@@ -599,16 +843,147 @@
                     <button class="cyber-action-btn skin-btn" onclick="openCustomMenu()">
                         КАСТОМИЗАЦИЯ 🎨
                     </button>
-                    <button class="cyber-action-btn disabled" disabled>
-                        СЕТЬ 🔒 (DEV)
+                    <button class="cyber-action-btn settings-btn" onclick="openSettingsMenu()">
+                        НАСТРОЙКИ ⚙️
                     </button>
                 </div>
+            </div>
+        </div>
+
+        <!-- МЕНЮ ВЫБОРА РЕЖИМА ИГРЫ -->
+        <div id="modeSelectMenu" class="overlay hidden">
+            <div class="glass-card" style="max-width: 500px;">
+                <h1>ВЫБОР РЕЖИМА</h1>
+                <p class="subtitle">ИНИЦИАЛИЗАЦИЯ ПОЛЕТНОГО ПРОТОКОЛА</p>
+
+                <div class="mode-select-grid">
+                    <!-- Карточка: Бесконечный режим -->
+                    <div class="mode-card mode-endless" onclick="selectGameMode('endless')">
+                        <div class="mode-card-icon">♾️</div>
+                        <div class="mode-card-info">
+                            <div class="mode-card-title">БЕСКОНЕЧНЫЙ РЕЖИМ</div>
+                            <div class="mode-card-desc">Восхождение в открытый космос без ограничений. Рекорды высоты, сбор кристаллов и выживание среди опасностей.</div>
+                            <div class="mode-card-tag">АРКАДНЫЙ ПРОТОКОЛ ►</div>
+                        </div>
+                    </div>
+
+                    <!-- Карточка: Сюжет -->
+                    <div class="mode-card mode-story" onclick="selectGameMode('story')">
+                        <div class="mode-card-icon">🛰️</div>
+                        <div class="mode-card-info">
+                            <div class="mode-card-title">СЮЖЕТНАЯ ЛИНИЯ</div>
+                            <div class="mode-card-desc">Сюжетная кампания сектора «Cyber Jump». Специальные уровни, диалоги, цепочки заданий и тайны сингулярности.</div>
+                            <div class="mode-card-tag" style="color: #ff0077;">ЗАПУСК МИССИЙ ►</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="menu-btn" onclick="closeModeSelectMenu()" style="background: rgba(12, 16, 36, 0.85); border: 1px solid rgba(0, 240, 255, 0.4); box-shadow: none; margin-top: 6px;">
+                    ◄ НАЗАД В МЕНЮ
+                </button>
+            </div>
+        </div>
+
+        <!-- МЕНЮ НАСТРОЕК -->
+        <div id="settingsMenu" class="overlay hidden">
+            <div class="glass-card">
+                <h1>НАСТРОЙКИ</h1>
+                <p class="subtitle">КОНФИГУРАЦИЯ СИСТЕМЫ</p>
+
+                <div class="custom-tabs-nav">
+                    <button class="custom-tab-btn active" id="settingsTabAudioBtn" onclick="switchSettingsTab('audio')">ЗВУК</button>
+                    <button class="custom-tab-btn" id="settingsTabGfxBtn" onclick="switchSettingsTab('gfx')">ГРАФИКА</button>
+                    <button class="custom-tab-btn" id="settingsTabCtrlBtn" onclick="switchSettingsTab('ctrl')">УПРАВЛЕНИЕ</button>
+                </div>
+
+                <!-- Вкладка: Звук -->
+                <div id="settingsTabAudio">
+                    <div class="settings-row">
+                        <span class="settings-label">ОБЩАЯ ГРОМКОСТЬ</span>
+                        <div class="settings-slider-wrap">
+                            <input type="range" class="cyber-slider" id="volumeMaster" min="0" max="100" value="80" oninput="updateAudioSettingsUI()">
+                            <span class="slider-val" id="volumeMasterVal">80%</span>
+                        </div>
+                    </div>
+                    <div class="settings-row">
+                        <span class="settings-label">СПЕЦЭФФЕКТЫ (SFX)</span>
+                        <div class="settings-slider-wrap">
+                            <input type="range" class="cyber-slider" id="volumeSfx" min="0" max="100" value="90" oninput="updateAudioSettingsUI()">
+                            <span class="slider-val" id="volumeSfxVal">90%</span>
+                        </div>
+                    </div>
+                    <div class="settings-row">
+                        <span class="settings-label">СИНТЕЗАТОР / CRT</span>
+                        <div class="settings-slider-wrap">
+                            <input type="range" class="cyber-slider" id="volumeSynth" min="0" max="100" value="70" oninput="updateAudioSettingsUI()">
+                            <span class="slider-val" id="volumeSynthVal">70%</span>
+                        </div>
+                    </div>
+                    <div class="settings-row">
+                        <span class="settings-label">ИНТЕРФЕЙС / КРИСТАЛЛЫ</span>
+                        <div class="settings-slider-wrap">
+                            <input type="range" class="cyber-slider" id="volumeUi" min="0" max="100" value="85" oninput="updateAudioSettingsUI()">
+                            <span class="slider-val" id="volumeUiVal">85%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Вкладка: Графика -->
+                <div id="settingsTabGfx" style="display: none;">
+                    <div class="custom-section-title">
+                        <span>УРОВЕНЬ ДЕТАЛИЗАЦИИ</span>
+                        <span id="currentGfxLabel" style="color:#00ff88;">СРЕДНИЙ</span>
+                    </div>
+                    <div class="gfx-tier-grid">
+                        <button class="gfx-tier-btn" id="gfxBtnLow" onclick="setGraphicsTier('low')">НИЗКИЙ</button>
+                        <button class="gfx-tier-btn active" id="gfxBtnMed" onclick="setGraphicsTier('medium')">СРЕДНИЙ</button>
+                        <button class="gfx-tier-btn" id="gfxBtnHigh" onclick="setGraphicsTier('high')">ВЫСОКИЙ</button>
+                    </div>
+                    <p style="font-family:'Share Tech Mono',monospace; font-size:10px; color:#8fa0c4; text-align:left; line-height:1.5;">
+                        • Низкий: отключает тяжелое свечение, снижает число частиц на 60% (для слабых устройств).<br>
+                        • Средний: стандартный неоновый баланс с полным набором эффектов.<br>
+                        • Высокий: усиленные блики, максимальные частицы (+60%) и расширенный шлейф.
+                    </p>
+                </div>
+
+                <!-- Вкладка: Управление (ПК) -->
+                <div id="settingsTabCtrl" style="display: none;">
+                    <p style="font-family:'Share Tech Mono',monospace; font-size:10px; color:#ffd700; margin-bottom:10px; text-align:left;">
+                        [ПК РЕЖИМ]: Нажмите на слот, затем нажмите любую клавишу для назначения.
+                    </p>
+                    <div class="bind-row">
+                        <span class="settings-label">ВЛЕВО</span>
+                        <button class="bind-btn" id="bindBtnLeft" onclick="startRebind('left')">A</button>
+                    </div>
+                    <div class="bind-row">
+                        <span class="settings-label">ВПРАВО</span>
+                        <button class="bind-btn" id="bindBtnRight" onclick="startRebind('right')">D</button>
+                    </div>
+                    <div class="bind-row">
+                        <span class="settings-label">ОГОНЬ / ВЫСТРЕЛ</span>
+                        <button class="bind-btn" id="bindBtnShoot" onclick="startRebind('shoot')">E</button>
+                    </div>
+                    <div class="bind-row">
+                        <span class="settings-label">ТАП ЛОВУШКИ / ПРОБЕЛ</span>
+                        <button class="bind-btn" id="bindBtnTrap" onclick="startRebind('trap')">SPACE</button>
+                    </div>
+                </div>
+
+                <button class="menu-btn" onclick="closeSettingsMenu()" style="margin-top: 14px;">СОХРАНИТЬ И ВЫЙТИ</button>
             </div>
         </div>
 
         <!-- МЕНЮ КАСТОМИЗАЦИИ -->
         <div id="customMenu" class="overlay hidden">
             <div class="glass-card">
+                <div class="wardrobe-top-bar">
+                    <div class="crystal-balance-badge">
+                        <span>💎</span>
+                        <strong id="wardrobeCrystalsBalance">0</strong>
+                    </div>
+                    <button class="dev-secret-btn" onclick="promptDevSecretCode()">🔑 DEV</button>
+                </div>
+
                 <h1>ГАРДЕРОБ</h1>
                 <p class="subtitle">МОДИФИКАЦИЯ СКАФАНДРА</p>
 
@@ -625,46 +1000,34 @@
                 <div class="custom-tabs-nav">
                     <button class="custom-tab-btn active" id="tabBtnHats" onclick="switchCustomTab('hats')">ШАПКИ</button>
                     <button class="custom-tab-btn" id="tabBtnEyes" onclick="switchCustomTab('eyes')">ГЛАЗА</button>
-                    <button class="custom-tab-btn disabled" disabled>КОСТЮМ 🔒</button>
-                    <button class="custom-tab-btn disabled" disabled>АУРА 🔒</button>
+                    <button class="custom-tab-btn" id="tabBtnAuras" onclick="switchCustomTab('auras')">АУРА</button>
                 </div>
 
+                <!-- Вкладка: Шапки -->
                 <div id="tabContentHats">
                     <div class="custom-section-title">
-                        <span>ГОЛОВНЫЕ УБОРЫ</span>
-                        <span id="hatStatusLabel" style="color:#00ff88;">1 / 8 ДОСТУПНО</span>
+                        <span>ГОЛОВНЫЕ УБОРЫ (-20%)</span>
+                        <span id="hatStatusLabel" style="color:#00ff88;">КОЛЛЕКЦИЯ</span>
                     </div>
-                    <div class="items-grid">
-                        <div class="item-slot available" id="slotCrown" onclick="toggleCrownHat()" title="Пиксельная Корона">
-                            👑
-                        </div>
-                        <div class="item-slot" title="Каска">🪖<span class="lock-tag">🔒</span></div>
-                        <div class="item-slot" title="Кепка">🧢<span class="lock-tag">🔒</span></div>
-                        <div class="item-slot" title="Наушники">🎧<span class="lock-tag">🔒</span></div>
-                        <div class="item-slot" title="Рога">😈<span class="lock-tag">🔒</span></div>
-                        <div class="item-slot" title="Цилиндр">🎩<span class="lock-tag">🔒</span></div>
-                        <div class="item-slot" title="Очки">🕶️<span class="lock-tag">🔒</span></div>
-                        <div class="item-slot" title="Нимб">😇<span class="lock-tag">🔒</span></div>
-                    </div>
+                    <div class="items-grid" id="hatsGrid"></div>
                 </div>
 
+                <!-- Вкладка: Глаза -->
                 <div id="tabContentEyes" style="display: none;">
                     <div class="custom-section-title">
-                        <span>КИБЕР-ОПТИКА</span>
-                        <span id="eyeStatusLabel" style="color:#00ff88;">1 / 8 ДОСТУПНО</span>
+                        <span>КИБЕР-ОПТИКА (-20%)</span>
+                        <span id="eyeStatusLabel" style="color:#00ff88;">КОЛЛЕКЦИЯ</span>
                     </div>
-                    <div class="items-grid">
-                        <div class="item-slot available" id="slotPixelEye" onclick="togglePixelEyes()" title="Детализированные пиксельные кибер-глаза">
-                            👀
-                        </div>
-                        <div class="item-slot" title="Неоновый визор">🥽<span class="lock-tag">🔒</span></div>
-                        <div class="item-slot" title="Лазерный прицел">🎯<span class="lock-tag">🔒</span></div>
-                        <div class="item-slot" title="Сканер X-Ray">👁️<span class="lock-tag">🔒</span></div>
-                        <div class="item-slot" title="Оптика дрона">👾<span class="lock-tag">🔒</span></div>
-                        <div class="item-slot" title="Солнцезащитная кибер-линза">🕶️<span class="lock-tag">🔒</span></div>
-                        <div class="item-slot" title="Зрачок сингулярности">🌌<span class="lock-tag">🔒</span></div>
-                        <div class="item-slot" title="Глаза киборга">🤖<span class="lock-tag">🔒</span></div>
+                    <div class="items-grid" id="eyesGrid"></div>
+                </div>
+
+                <!-- Вкладка: Аура -->
+                <div id="tabContentAuras" style="display: none;">
+                    <div class="custom-section-title">
+                        <span>ЭНЕРГЕТИЧЕСКАЯ АУРА (-20%)</span>
+                        <span id="auraStatusLabel" style="color:#00ff88;">ЭФФЕКТЫ</span>
                     </div>
+                    <div class="items-grid" id="aurasGrid"></div>
                 </div>
 
                 <button class="menu-btn" onclick="closeCustomMenu()">СОХРАНИТЬ И ВЫЙТИ</button>
@@ -680,10 +1043,11 @@
             <div class="hud-panel">
                 <div class="score-box"><span id="score">0</span> m</div>
                 <div class="highscore-box">РЕКОРД: <span id="highScore">0</span> m</div>
+                <div class="crystals-hud-box">💎 <span id="hudCrystals">0</span></div>
             </div>
         </div>
 
-        <!-- МЕНЮ ПАУЗЫ (6 КНОПОК) -->
+        <!-- МЕНЮ ПАУЗЫ -->
         <div id="pauseMenu" class="overlay hidden">
             <div class="glass-card">
                 <h1>ПАУЗА</h1>
@@ -691,8 +1055,11 @@
                 <button class="menu-btn" onclick="goToMainMenu()" style="background: linear-gradient(90deg, #00f0ff, #0066ff); box-shadow: 0 0 20px rgba(0, 240, 255, 0.45); margin-bottom: 15px;">В МЕНЮ</button>
 
                 <div class="dev-panel">
-                    <div class="dev-title">⚙️ DEV TOOLS / ЧИТЫ</div>
-                    <div class="dev-grid">
+                    <div class="dev-title-wrap">
+                        <div class="dev-title">⚙️ DEV TOOLS / ЧИТЫ</div>
+                        <button class="dev-lock-btn" id="devLockStatusBtn" onclick="promptDevMenuUnlock()">🔒 ЗАМОК</button>
+                    </div>
+                    <div class="dev-grid" id="devGridBox">
                         <button class="dev-btn" id="devNoclip" onclick="toggleDevOption('noclip')">NOCLIP: OFF</button>
                         <button class="dev-btn" id="devGodMode" onclick="toggleDevOption('godmode')">GOD MODE: OFF</button>
                         <button class="dev-btn" onclick="triggerDevAction('jetpack')">🚀 JETPACK</button>
@@ -706,6 +1073,10 @@
             <div class="glass-card">
                 <h1 style="background: linear-gradient(45deg, #ff0055, #ff5500); -webkit-background-clip: text;">СИСТЕМНЫЙ СБОЙ!</h1>
                 <p class="subtitle">ВЫСОТА: <span id="finalScore" style="color:#00f0ff; font-weight:900;">0</span> m</p>
+                <p style="font-family:'Share Tech Mono',monospace; font-size:13px; color:#ffd700; margin-bottom: 14px;">
+                    СОБРАНО КРИСТАЛЛОВ: <strong id="gameOverRunCrystals" style="color:#fff;">0</strong> 💎<br>
+                    <span style="font-size:11px; color:#00f0ff;">ВСЕГО В БАНКЕ: <strong id="gameOverTotalCrystals">0</strong> 💎</span>
+                </p>
                 <button class="menu-btn" onclick="startGame()">ПОВТОРИТЬ</button>
             </div>
         </div>
@@ -728,10 +1099,17 @@ const ctx = canvas.getContext('2d');
 const scoreEl = document.getElementById('score');
 const highScoreEl = document.getElementById('highScore');
 const menuHighScoreEl = document.getElementById('menuHighScore');
+const menuTotalCrystalsEl = document.getElementById('menuTotalCrystals');
+const hudCrystalsEl = document.getElementById('hudCrystals');
 const finalScoreEl = document.getElementById('finalScore');
+const gameOverRunCrystalsEl = document.getElementById('gameOverRunCrystals');
+const gameOverTotalCrystalsEl = document.getElementById('gameOverTotalCrystals');
+const wardrobeCrystalsBalanceEl = document.getElementById('wardrobeCrystalsBalance');
 
 const mainMenu = document.getElementById('mainMenu');
+const modeSelectMenu = document.getElementById('modeSelectMenu');
 const customMenu = document.getElementById('customMenu');
+const settingsMenu = document.getElementById('settingsMenu');
 const pauseMenu = document.getElementById('pauseMenu');
 const gameOverMenu = document.getElementById('gameOverMenu');
 
@@ -743,7 +1121,212 @@ const btnSound = document.getElementById('btnSound');
 const menuSoundToggle = document.getElementById('menuSoundToggle');
 const btnPause = document.getElementById('btnPause');
 
-// --- КАСТОМИЗАЦИЯ ПЕРСОНАЖА (ШАПКИ И ГЛАЗА) ---
+// --- НАВИГАЦИЯ ВЫБОРА РЕЖИМА ИГРЫ ---
+function startFromMainMenu() {
+    openModeSelectMenu();
+}
+
+function openModeSelectMenu() {
+    playSound('bounce');
+    mainMenu.classList.add('hidden');
+    modeSelectMenu.classList.remove('hidden');
+}
+
+function closeModeSelectMenu() {
+    playSound('bounce');
+    modeSelectMenu.classList.add('hidden');
+    mainMenu.classList.remove('hidden');
+}
+
+function selectGameMode(mode) {
+    if (mode === 'endless') {
+        modeSelectMenu.classList.add('hidden');
+        triggerCRTBoot();
+    } else if (mode === 'story') {
+        playSound('spring');
+        setTimeout(() => {
+            window.location.href = 'story.html';
+        }, 220);
+    }
+}
+
+// --- ГЛУБОКИЕ НАСТРОЙКИ ЗВУКА ---
+let audioSettings = JSON.parse(localStorage.getItem('cyber_jump_audio_settings') || JSON.stringify({
+    master: 80,
+    sfx: 90,
+    synth: 70,
+    ui: 85
+}));
+
+// --- НАСТРОЙКИ ГРАФИКИ ---
+let graphicsTier = localStorage.getItem('cyber_jump_graphics_tier') || 'medium';
+
+// --- НАСТРОЙКИ УПРАВЛЕНИЯ ПК ---
+let customBinds = JSON.parse(localStorage.getItem('cyber_jump_binds') || JSON.stringify({
+    left: 'KeyA',
+    right: 'KeyD',
+    shoot: 'KeyE',
+    trap: 'Space'
+}));
+
+let currentlyRebinding = null;
+
+function getKeyDisplay(code) {
+    if (!code) return '---';
+    if (code.startsWith('Key')) return code.slice(3);
+    if (code.startsWith('Digit')) return code.slice(5);
+    if (code === 'Space') return 'SPACE';
+    if (code === 'ArrowLeft') return 'ВЛЕВО';
+    if (code === 'ArrowRight') return 'ВПРАВО';
+    if (code === 'ArrowUp') return 'ВВЕРХ';
+    if (code === 'ArrowDown') return 'ВНИЗ';
+    return code.toUpperCase();
+}
+
+function updateControlsUI() {
+    const bLeft = document.getElementById('bindBtnLeft');
+    const bRight = document.getElementById('bindBtnRight');
+    const bShoot = document.getElementById('bindBtnShoot');
+    const bTrap = document.getElementById('bindBtnTrap');
+
+    if (bLeft) {
+        bLeft.innerText = (currentlyRebinding === 'left') ? 'НАЖМИТЕ...' : getKeyDisplay(customBinds.left);
+        bLeft.classList.toggle('listening', currentlyRebinding === 'left');
+    }
+    if (bRight) {
+        bRight.innerText = (currentlyRebinding === 'right') ? 'НАЖМИТЕ...' : getKeyDisplay(customBinds.right);
+        bRight.classList.toggle('listening', currentlyRebinding === 'right');
+    }
+    if (bShoot) {
+        bShoot.innerText = (currentlyRebinding === 'shoot') ? 'НАЖМИТЕ...' : getKeyDisplay(customBinds.shoot);
+        bShoot.classList.toggle('listening', currentlyRebinding === 'shoot');
+    }
+    if (bTrap) {
+        bTrap.innerText = (currentlyRebinding === 'trap') ? 'НАЖМИТЕ...' : getKeyDisplay(customBinds.trap);
+        bTrap.classList.toggle('listening', currentlyRebinding === 'trap');
+    }
+
+    const tip = document.getElementById('mainMenuControlsTip');
+    if (tip) {
+        tip.innerHTML = `<span>[${getKeyDisplay(customBinds.left)} / ${getKeyDisplay(customBinds.right)}]</span> ДВИЖЕНИЕ • <span>[${getKeyDisplay(customBinds.shoot)}]</span> ОГОНЬ • <span>[ENTER]</span> СТАРТ`;
+    }
+}
+
+function startRebind(action) {
+    currentlyRebinding = action;
+    updateControlsUI();
+}
+
+function openSettingsMenu() {
+    initSettingsUI();
+    settingsMenu.classList.remove('hidden');
+}
+
+function closeSettingsMenu() {
+    currentlyRebinding = null;
+    settingsMenu.classList.add('hidden');
+}
+
+function switchSettingsTab(tab) {
+    document.getElementById('settingsTabAudio').style.display = (tab === 'audio') ? 'block' : 'none';
+    document.getElementById('settingsTabGfx').style.display = (tab === 'gfx') ? 'block' : 'none';
+    document.getElementById('settingsTabCtrl').style.display = (tab === 'ctrl') ? 'block' : 'none';
+
+    document.getElementById('settingsTabAudioBtn').classList.toggle('active', tab === 'audio');
+    document.getElementById('settingsTabGfxBtn').classList.toggle('active', tab === 'gfx');
+    document.getElementById('settingsTabCtrlBtn').classList.toggle('active', tab === 'ctrl');
+}
+
+function updateAudioSettingsUI() {
+    audioSettings.master = parseInt(document.getElementById('volumeMaster').value, 10);
+    audioSettings.sfx = parseInt(document.getElementById('volumeSfx').value, 10);
+    audioSettings.synth = parseInt(document.getElementById('volumeSynth').value, 10);
+    audioSettings.ui = parseInt(document.getElementById('volumeUi').value, 10);
+
+    document.getElementById('volumeMasterVal').innerText = audioSettings.master + '%';
+    document.getElementById('volumeSfxVal').innerText = audioSettings.sfx + '%';
+    document.getElementById('volumeSynthVal').innerText = audioSettings.synth + '%';
+    document.getElementById('volumeUiVal').innerText = audioSettings.ui + '%';
+
+    localStorage.setItem('cyber_jump_audio_settings', JSON.stringify(audioSettings));
+}
+
+function setGraphicsTier(tier) {
+    graphicsTier = tier;
+    localStorage.setItem('cyber_jump_graphics_tier', tier);
+
+    document.getElementById('gfxBtnLow').classList.toggle('active', tier === 'low');
+    document.getElementById('gfxBtnMed').classList.toggle('active', tier === 'medium');
+    document.getElementById('gfxBtnHigh').classList.toggle('active', tier === 'high');
+
+    const label = document.getElementById('currentGfxLabel');
+    if (label) {
+        label.innerText = tier === 'low' ? 'НИЗКИЙ' : (tier === 'high' ? 'ВЫСОКИЙ' : 'СРЕДНИЙ');
+        label.style.color = tier === 'low' ? '#ffaa00' : (tier === 'high' ? '#00f0ff' : '#00ff88');
+    }
+}
+
+function initSettingsUI() {
+    document.getElementById('volumeMaster').value = audioSettings.master;
+    document.getElementById('volumeSfx').value = audioSettings.sfx;
+    document.getElementById('volumeSynth').value = audioSettings.synth;
+    document.getElementById('volumeUi').value = audioSettings.ui;
+    updateAudioSettingsUI();
+    setGraphicsTier(graphicsTier);
+    updateControlsUI();
+}
+
+// --- КРИСТАЛЛЫ И ЭКОНОМИКА ---
+let totalCrystals = parseInt(localStorage.getItem('cyber_jump_crystals') || '0', 10);
+let sessionRunCrystals = 0;
+let crystals = [];
+
+function updateCrystalCounters() {
+    if (hudCrystalsEl) hudCrystalsEl.innerText = sessionRunCrystals;
+    if (menuTotalCrystalsEl) menuTotalCrystalsEl.innerText = totalCrystals;
+    if (wardrobeCrystalsBalanceEl) wardrobeCrystalsBalanceEl.innerText = totalCrystals;
+}
+
+// --- СПИСОК ВСЕХ 8 ГОЛОВНЫХ УБОРОВ ---
+const HATS_DB = [
+    { id: 'crown', name: 'Корона', icon: '👑', price: 0 },
+    { id: 'helmet', name: 'Каска', icon: '🪖', price: 96 },
+    { id: 'cap', name: 'Кепка', icon: '🧢', price: 105 },
+    { id: 'headphones', name: 'Наушники', icon: '🎧', price: 116 },
+    { id: 'horns', name: 'Рога', icon: '😈', price: 128 },
+    { id: 'tophat', name: 'Цилиндр', icon: '🎩', price: 140 },
+    { id: 'glasses', name: 'Очки', icon: '🕶️', price: 155 },
+    { id: 'halo', name: 'Нимб', icon: '😇', price: 170 }
+];
+
+// --- СПИСОК ВСЕХ 8 ТИПОВ ГЛАЗ ---
+const EYES_DB = [
+    { id: 'default', name: 'Стандарт', icon: '◽', price: 0 },
+    { id: 'pixel', name: 'Кибер-пиксель', icon: '👀', price: 0 },
+    { id: 'visor', name: 'Неоновый визор', icon: '🥽', price: 160 },
+    { id: 'scope', name: 'Прицел', icon: '🎯', price: 176 },
+    { id: 'xray', name: 'X-Ray сканер', icon: '👁️', price: 193 },
+    { id: 'drone_eye', name: 'Оптика дрона', icon: '👾', price: 212 },
+    { id: 'cyber_lens', name: 'Кибер-линзы', icon: '🕶️', price: 234 },
+    { id: 'singularity', name: 'Сингулярность', icon: '🌌', price: 257 }
+];
+
+// --- СПИСОК ВСЕХ 8 АУР ---
+const AURAS_DB = [
+    { id: 'none', name: 'Без ауры', icon: '🚫', price: 0 },
+    { id: 'cyber_rings', name: 'Кибер-орбиты', icon: '🌀', price: 64 },
+    { id: 'neon_fire', name: 'Пламя', icon: '🔥', price: 76 },
+    { id: 'void_dark', name: 'Тень бездны', icon: '🖤', price: 92 },
+    { id: 'electro', name: 'Электрошок', icon: '⚡', price: 108 },
+    { id: 'matrix', name: 'Матрица', icon: '🟩', price: 128 },
+    { id: 'rainbow', name: 'Хроматик', icon: '🌈', price: 152 },
+    { id: 'stardust', name: 'Звездная пыль', icon: '✨', price: 180 }
+];
+
+let unlockedHats = JSON.parse(localStorage.getItem('cyber_jump_unlocked_hats') || '["none","crown"]');
+let unlockedEyes = JSON.parse(localStorage.getItem('cyber_jump_unlocked_eyes') || '["default","pixel"]');
+let unlockedAuras = JSON.parse(localStorage.getItem('cyber_jump_unlocked_auras') || '["none"]');
+
 const colorPalettes = [
     { name: 'CYAN', hex: '#00f0ff' },
     { name: 'ROSE', hex: '#ff0055' },
@@ -755,35 +1338,92 @@ const colorPalettes = [
 let userSkinColor = localStorage.getItem('cyber_jump_color') || '#00f0ff';
 let userEquippedHat = localStorage.getItem('cyber_jump_hat') || 'none';
 let userEquippedEye = localStorage.getItem('cyber_jump_eye') || 'default';
-
-function drawPixelCrown(c, charX, charY) {
-    c.save();
-    c.fillStyle = '#ffd700';
-    c.shadowColor = '#ffaa00';
-    c.shadowBlur = 6;
-
-    c.fillRect(charX + 4, charY - 2, 20, 3);
-    c.fillRect(charX + 4, charY - 7, 4, 5);
-    c.fillRect(charX + 12, charY - 9, 4, 7);
-    c.fillRect(charX + 20, charY - 7, 4, 5);
-    c.fillRect(charX + 8, charY - 4, 4, 2);
-    c.fillRect(charX + 16, charY - 4, 4, 2);
-
-    c.shadowBlur = 0;
-    c.fillStyle = '#ff0055';
-    c.fillRect(charX + 13, charY - 7, 2, 3);
-    c.fillStyle = '#00f0ff';
-    c.fillRect(charX + 5, charY - 5, 2, 2);
-    c.fillRect(charX + 21, charY - 5, 2, 2);
-    c.fillStyle = '#e6004c';
-    c.fillRect(charX + 6, charY - 1, 16, 1.5);
-    c.restore();
-}
+let userEquippedAura = localStorage.getItem('cyber_jump_aura') || 'none';
 
 function drawEquippedHat(c, charX, charY) {
+    if (userEquippedHat === 'none') return;
+    c.save();
+
     if (userEquippedHat === 'crown') {
-        drawPixelCrown(c, charX, charY);
+        c.fillStyle = '#ffd700';
+        c.fillRect(charX + 4, charY - 2, 20, 3);
+        c.fillRect(charX + 4, charY - 8, 4, 6);
+        c.fillRect(charX + 12, charY - 10, 4, 8);
+        c.fillRect(charX + 20, charY - 8, 4, 6);
+        c.fillRect(charX + 8, charY - 5, 4, 3);
+        c.fillRect(charX + 16, charY - 5, 4, 3);
+        c.fillStyle = '#ff0055'; c.fillRect(charX + 13, charY - 7, 2, 3);
+        c.fillStyle = '#00f0ff'; c.fillRect(charX + 5, charY - 6, 2, 2);
+        c.fillStyle = '#00ff88'; c.fillRect(charX + 21, charY - 6, 2, 2);
+    } else if (userEquippedHat === 'helmet') {
+        c.fillStyle = '#ff9900';
+        c.fillRect(charX + 2, charY - 7, 24, 8);
+        c.fillStyle = '#ffd24d';
+        c.fillRect(charX + 4, charY - 6, 20, 2);
+        c.fillStyle = '#020b22';
+        c.fillRect(charX + 2, charY - 1, 24, 2);
+        c.fillStyle = '#00f0ff';
+        c.fillRect(charX + 10, charY - 4, 12, 3);
+    } else if (userEquippedHat === 'cap') {
+        c.fillStyle = '#ff0055';
+        c.fillRect(charX + 3, charY - 6, 22, 6);
+        c.fillStyle = '#cc0044';
+        c.fillRect(charX + 6, charY - 8, 16, 2);
+        c.fillStyle = '#ffffff';
+        c.fillRect(charX + 17, charY - 2, 11, 3);
+    } else if (userEquippedHat === 'headphones') {
+        c.strokeStyle = '#00f0ff';
+        c.lineWidth = 2.5;
+        c.beginPath();
+        c.arc(charX + 14, charY + 2, 13, Math.PI, 0);
+        c.stroke();
+        c.fillStyle = '#ff0055';
+        c.fillRect(charX - 1, charY + 3, 4, 10);
+        c.fillRect(charX + 25, charY + 3, 4, 10);
+        c.fillStyle = '#00ff88';
+        c.fillRect(charX, charY + 6, 2, 4);
+        c.fillRect(charX + 26, charY + 6, 2, 4);
+    } else if (userEquippedHat === 'horns') {
+        c.fillStyle = '#ff0033';
+        c.beginPath();
+        c.moveTo(charX + 4, charY);
+        c.lineTo(charX + 2, charY - 10);
+        c.lineTo(charX + 8, charY - 4);
+        c.closePath(); c.fill();
+        c.beginPath();
+        c.moveTo(charX + 24, charY);
+        c.lineTo(charX + 26, charY - 10);
+        c.lineTo(charX + 20, charY - 4);
+        c.closePath(); c.fill();
+        c.fillStyle = '#ffff00';
+        c.fillRect(charX + 3, charY - 10, 2, 2);
+        c.fillRect(charX + 23, charY - 10, 2, 2);
+    } else if (userEquippedHat === 'tophat') {
+        c.fillStyle = '#0a0d16';
+        c.fillRect(charX + 1, charY - 2, 26, 3);
+        c.fillRect(charX + 5, charY - 13, 18, 11);
+        c.fillStyle = '#00f0ff';
+        c.fillRect(charX + 5, charY - 4, 18, 2);
+        c.fillStyle = '#ffd700';
+        c.fillRect(charX + 12, charY - 5, 4, 3);
+    } else if (userEquippedHat === 'glasses') {
+        c.fillStyle = '#111320';
+        c.fillRect(charX + 4, charY + 7, 22, 5);
+        c.fillStyle = '#00f0ff';
+        c.fillRect(charX + 6, charY + 8, 8, 3);
+        c.fillRect(charX + 16, charY + 8, 8, 3);
+        c.fillStyle = '#ffffff';
+        c.fillRect(charX + 7, charY + 8, 2, 1);
+        c.fillRect(charX + 17, charY + 8, 2, 1);
+    } else if (userEquippedHat === 'halo') {
+        const pulse = Math.sin(animTicks * 0.1) * 1.5;
+        c.strokeStyle = '#ffd700';
+        c.lineWidth = 2.5;
+        c.beginPath();
+        c.ellipse(charX + 14, charY - 9 + pulse, 12, 3.5, 0, 0, Math.PI * 2);
+        c.stroke();
     }
+    c.restore();
 }
 
 function drawCharacterEyes(c, charX, charY, lookingLeft = false) {
@@ -793,29 +1433,64 @@ function drawCharacterEyes(c, charX, charY, lookingLeft = false) {
     if (userEquippedEye === 'pixel') {
         const ex = lookingLeft ? charX + 3 : charX + 12;
         const ey = charY + 7;
-
-        c.fillStyle = '#050612';
-        c.fillRect(ex, ey, 13, 11);
-
-        c.fillStyle = '#ffffff';
-        c.fillRect(ex + 1, ey + 1, 11, 9);
-
-        c.fillStyle = '#00f0ff';
-        c.fillRect(ex + (lookingLeft ? 1 : 3), ey + 2, 7, 7);
-
-        c.fillStyle = '#020b22';
-        c.fillRect(ex + (lookingLeft ? 3 : 5), ey + 3, 4, 5);
-
-        c.fillStyle = '#ffffff';
-        c.fillRect(ex + (lookingLeft ? 2 : 4), ey + 2, 2, 2);
+        c.fillStyle = '#050612'; c.fillRect(ex, ey, 13, 11);
+        c.fillStyle = '#ffffff'; c.fillRect(ex + 1, ey + 1, 11, 9);
+        c.fillStyle = '#00f0ff'; c.fillRect(ex + (lookingLeft ? 1 : 3), ey + 2, 7, 7);
+        c.fillStyle = '#020b22'; c.fillRect(ex + (lookingLeft ? 3 : 5), ey + 3, 4, 5);
+        c.fillStyle = '#ffffff'; c.fillRect(ex + (lookingLeft ? 2 : 4), ey + 2, 2, 2);
         c.fillRect(ex + (lookingLeft ? 4 : 6), ey + 5, 1, 1);
-
-        c.fillStyle = '#00ff88';
-        c.fillRect(ex, ey - 1, 13, 1.5);
+        c.fillStyle = '#00ff88'; c.fillRect(ex, ey - 1, 13, 1.5);
+    } else if (userEquippedEye === 'visor') {
+        c.fillStyle = '#10051d';
+        c.fillRect(charX + 3, charY + 7, 22, 7);
+        c.fillStyle = '#ff0077';
+        c.fillRect(charX + 4, charY + 8, 20, 5);
+        const sweep = (Math.sin(animTicks * 0.15) + 1) * 7;
+        c.fillStyle = '#ffffff';
+        c.fillRect(charX + 4 + sweep, charY + 9, 4, 3);
+    } else if (userEquippedEye === 'scope') {
+        c.strokeStyle = '#ff0033';
+        c.lineWidth = 1.5;
+        c.strokeRect(eyeBaseX - 1, charY + 5, 12, 12);
+        c.fillStyle = '#ff0033';
+        c.fillRect(eyeBaseX + 4, charY + 10, 3, 3);
+        c.fillRect(eyeBaseX - 3, charY + 10, 3, 2);
+        c.fillRect(eyeBaseX + 10, charY + 10, 3, 2);
+    } else if (userEquippedEye === 'xray') {
+        c.fillStyle = '#021808';
+        c.fillRect(eyeBaseX - 1, charY + 6, 12, 9);
+        c.fillStyle = '#00ff66';
+        c.fillRect(eyeBaseX, charY + 7, 10, 7);
+        c.fillStyle = '#ffffff';
+        c.fillRect(eyeBaseX + (lookingLeft ? 2 : 5), charY + 9, 3, 3);
+    } else if (userEquippedEye === 'drone_eye') {
+        c.fillStyle = '#121422';
+        c.fillRect(eyeBaseX, charY + 5, 10, 11);
+        c.fillStyle = '#ff0044';
+        c.beginPath(); c.arc(eyeBaseX + 5, charY + 10, 4, 0, Math.PI * 2); c.fill();
+        c.fillStyle = '#ffff00';
+        c.beginPath(); c.arc(eyeBaseX + 5, charY + 10, 2, 0, Math.PI * 2); c.fill();
+    } else if (userEquippedEye === 'cyber_lens') {
+        c.fillStyle = '#111';
+        c.fillRect(eyeBaseX - 2, charY + 7, 13, 7);
+        c.fillStyle = '#00f0ff';
+        c.fillRect(eyeBaseX - 1, charY + 8, 11, 4);
+        c.fillStyle = '#ffd700';
+        c.fillRect(eyeBaseX + 2, charY + 9, 2, 2);
+    } else if (userEquippedEye === 'singularity') {
+        c.fillStyle = '#050014';
+        c.fillRect(eyeBaseX - 1, charY + 5, 12, 12);
+        const spin = animTicks * 0.2;
+        c.strokeStyle = '#a600ff';
+        c.lineWidth = 2;
+        c.beginPath();
+        c.arc(eyeBaseX + 5, charY + 11, 4, spin, spin + Math.PI * 1.5);
+        c.stroke();
+        c.fillStyle = '#ffd700';
+        c.fillRect(eyeBaseX + 4, charY + 10, 2, 2);
     } else {
         c.fillStyle = '#030310';
         c.fillRect(eyeBaseX, charY + 8, 9, 7);
-
         const eyeGlint = ((animTicks % 35) / 35) * 6;
         c.fillStyle = '#00ff88';
         c.fillRect(eyeBaseX + eyeGlint, charY + 10, 2, 3);
@@ -823,48 +1498,237 @@ function drawCharacterEyes(c, charX, charY, lookingLeft = false) {
     c.restore();
 }
 
-function toggleCrownHat() {
-    userEquippedHat = (userEquippedHat === 'crown') ? 'none' : 'crown';
-    localStorage.setItem('cyber_jump_hat', userEquippedHat);
-    updateCustomUI();
-    updatePreviewCanvas();
+function drawEquippedAura(c, charX, charY) {
+    if (userEquippedAura === 'none') return;
+    c.save();
+    const cx = charX + 14;
+    const cy = charY + 19;
+
+    if (userEquippedAura === 'cyber_rings') {
+        c.strokeStyle = '#00f0ff';
+        c.lineWidth = 1.5;
+        const rotA = animTicks * 0.05;
+        const rotB = -animTicks * 0.04;
+        c.save(); c.translate(cx, cy); c.rotate(rotA);
+        c.beginPath(); c.ellipse(0, 0, 26, 12, 0, 0, Math.PI * 2); c.stroke();
+        c.restore();
+        c.save(); c.translate(cx, cy); c.rotate(rotB);
+        c.strokeStyle = '#ff0055';
+        c.beginPath(); c.ellipse(0, 0, 28, 14, 0, 0, Math.PI * 2); c.stroke();
+        c.restore();
+    } else if (userEquippedAura === 'neon_fire') {
+        c.fillStyle = 'rgba(255, 60, 0, 0.4)';
+        for (let i = 0; i < 5; i++) {
+            const fx = cx - 12 + i * 6 + Math.sin(animTicks * 0.2 + i) * 3;
+            const fy = cy + 16 - (animTicks * 2 + i * 8) % 36;
+            c.beginPath(); c.arc(fx, fy, 4, 0, Math.PI * 2); c.fill();
+        }
+    } else if (userEquippedAura === 'void_dark') {
+        c.fillStyle = 'rgba(40, 0, 80, 0.35)';
+        const r = 24 + Math.sin(animTicks * 0.1) * 4;
+        c.beginPath(); c.arc(cx, cy, r, 0, Math.PI * 2); c.fill();
+        c.strokeStyle = '#a600ff'; c.lineWidth = 1.2;
+        c.beginPath(); c.arc(cx, cy, r + 2, 0, Math.PI * 2); c.stroke();
+    } else if (userEquippedAura === 'electro') {
+        c.strokeStyle = '#ffff00';
+        c.lineWidth = 1.5;
+        for (let i = 0; i < 3; i++) {
+            const ang = (animTicks * 0.15) + (i * Math.PI * 2) / 3;
+            const ex = cx + Math.cos(ang) * 25;
+            const ey = cy + Math.sin(ang) * 25;
+            c.beginPath();
+            c.moveTo(cx, cy);
+            c.lineTo(cx + (ex - cx) * 0.5 + (Math.random() - 0.5) * 8, cy + (ey - cy) * 0.5);
+            c.lineTo(ex, ey);
+            c.stroke();
+        }
+    } else if (userEquippedAura === 'matrix') {
+        c.fillStyle = '#00ff66';
+        c.font = '8px "Share Tech Mono"';
+        for (let i = 0; i < 4; i++) {
+            const mx = cx - 16 + i * 10;
+            const my = cy - 20 + (animTicks * 1.5 + i * 12) % 44;
+            c.fillText((i % 2 === 0 ? '1' : '0'), mx, my);
+        }
+    } else if (userEquippedAura === 'rainbow') {
+        const hue = (animTicks * 3) % 360;
+        c.strokeStyle = `hsl(${hue}, 100%, 55%)`;
+        c.lineWidth = 2.5;
+        c.beginPath();
+        c.arc(cx, cy, 26, 0, Math.PI * 2);
+        c.stroke();
+    } else if (userEquippedAura === 'stardust') {
+        c.fillStyle = '#ffd700';
+        for (let i = 0; i < 4; i++) {
+            const ang = animTicks * 0.08 + (i * Math.PI * 2) / 4;
+            const sx = cx + Math.cos(ang) * 24;
+            const sy = cy + Math.sin(ang) * 24;
+            c.fillRect(sx - 2, sy - 2, 4, 4);
+        }
+    }
+    c.restore();
 }
 
-function togglePixelEyes() {
-    userEquippedEye = (userEquippedEye === 'pixel') ? 'default' : 'pixel';
-    localStorage.setItem('cyber_jump_eye', userEquippedEye);
-    updateCustomUI();
-    updatePreviewCanvas();
+// --- DEV TOOLS: ЗАМОК И РАЗБЛОКИРОВКА В МЕНЮ ИГРЫ (148867) ---
+let devToolsUnlocked = localStorage.getItem('cyber_jump_devtools_unlocked') === 'true';
+
+function updateDevToolsUI() {
+    const btn = document.getElementById('devLockStatusBtn');
+    const box = document.getElementById('devGridBox');
+    if (!btn || !box) return;
+
+    if (devToolsUnlocked) {
+        btn.innerText = '🔓 ОТКРЫТО';
+        btn.classList.add('unlocked');
+        box.style.display = 'grid';
+    } else {
+        btn.innerText = '🔒 ЗАМОК';
+        btn.classList.remove('unlocked');
+        box.style.display = 'none';
+    }
+}
+
+function promptDevMenuUnlock() {
+    if (devToolsUnlocked) {
+        alert('DEV TOOLS УЖЕ РАЗБЛОКИРОВАНЫ!');
+        return;
+    }
+    const code = prompt('ВВЕДИТЕ КОД ДОСТУПА К DEV TOOLS:');
+    if (code === '148867') {
+        devToolsUnlocked = true;
+        localStorage.setItem('cyber_jump_devtools_unlocked', 'true');
+        playSound('spring');
+        alert('ДОСТУП РАЗРЕШЕН! Панель Dev Tools активирована!');
+        updateDevToolsUI();
+    } else if (code !== null) {
+        alert('ОШИБКА: НЕВЕРНЫЙ КОД ДОСТУПА!');
+    }
+}
+
+// --- ГАРДЕРОБ: СЕКРЕТНЫЙ КОД 66767 ---
+function promptDevSecretCode() {
+    const code = prompt('ВВЕДИТЕ СЕКРЕТНЫЙ КОД ГАРДЕРОБА:');
+    if (code === '66767') {
+        unlockedHats = HATS_DB.map(h => h.id).concat(['none']);
+        unlockedEyes = EYES_DB.map(e => e.id);
+        unlockedAuras = AURAS_DB.map(a => a.id);
+        localStorage.setItem('cyber_jump_unlocked_hats', JSON.stringify(unlockedHats));
+        localStorage.setItem('cyber_jump_unlocked_eyes', JSON.stringify(unlockedEyes));
+        localStorage.setItem('cyber_jump_unlocked_auras', JSON.stringify(unlockedAuras));
+        playSound('spring');
+        alert('КОД 66767 ПРИНЯТ!\nВсе шапки, глаза и ауры открыты!');
+        renderCustomGrids();
+        updatePreviewCanvas();
+    } else if (code !== null) {
+        alert('НЕВЕРНЫЙ КОД!');
+    }
 }
 
 function switchCustomTab(tab) {
-    const hatsContent = document.getElementById('tabContentHats');
-    const eyesContent = document.getElementById('tabContentEyes');
-    const tabBtnHats = document.getElementById('tabBtnHats');
-    const tabBtnEyes = document.getElementById('tabBtnEyes');
-
-    if (tab === 'hats') {
-        hatsContent.style.display = 'block';
-        eyesContent.style.display = 'none';
-        tabBtnHats.classList.add('active');
-        tabBtnEyes.classList.remove('active');
-    } else if (tab === 'eyes') {
-        hatsContent.style.display = 'none';
-        eyesContent.style.display = 'block';
-        tabBtnHats.classList.remove('active');
-        tabBtnEyes.classList.add('active');
-    }
+    document.getElementById('tabContentHats').style.display = tab === 'hats' ? 'block' : 'none';
+    document.getElementById('tabContentEyes').style.display = tab === 'eyes' ? 'block' : 'none';
+    document.getElementById('tabContentAuras').style.display = tab === 'auras' ? 'block' : 'none';
+    document.getElementById('tabBtnHats').classList.toggle('active', tab === 'hats');
+    document.getElementById('tabBtnEyes').classList.toggle('active', tab === 'eyes');
+    document.getElementById('tabBtnAuras').classList.toggle('active', tab === 'auras');
 }
 
-function updateCustomUI() {
-    const crownSlot = document.getElementById('slotCrown');
-    if (crownSlot) {
-        crownSlot.classList.toggle('active', userEquippedHat === 'crown');
-    }
-    const pixelEyeSlot = document.getElementById('slotPixelEye');
-    if (pixelEyeSlot) {
-        pixelEyeSlot.classList.toggle('active', userEquippedEye === 'pixel');
-    }
+function renderCustomGrids() {
+    const hatsGrid = document.getElementById('hatsGrid');
+    hatsGrid.innerHTML = '';
+    HATS_DB.forEach(h => {
+        const isUnlocked = unlockedHats.includes(h.id);
+        const isEquipped = userEquippedHat === h.id;
+        const slot = document.createElement('div');
+        slot.className = `item-slot ${isUnlocked ? 'available' : 'locked'} ${isEquipped ? 'active' : ''}`;
+        slot.innerHTML = `<span>${h.icon}</span><span class="item-price-tag">${isUnlocked ? (isEquipped ? 'НАДЕТО' : 'ВЗЯТЬ') : h.price + ' 💎'}</span>`;
+        slot.onclick = () => {
+            if (isUnlocked) {
+                userEquippedHat = (userEquippedHat === h.id) ? 'none' : h.id;
+                localStorage.setItem('cyber_jump_hat', userEquippedHat);
+            } else {
+                if (totalCrystals >= h.price) {
+                    totalCrystals -= h.price;
+                    localStorage.setItem('cyber_jump_crystals', totalCrystals);
+                    unlockedHats.push(h.id);
+                    localStorage.setItem('cyber_jump_unlocked_hats', JSON.stringify(unlockedHats));
+                    userEquippedHat = h.id;
+                    localStorage.setItem('cyber_jump_hat', userEquippedHat);
+                    playSound('crystal_pickup');
+                } else {
+                    alert('Недостаточно кристаллов!');
+                }
+            }
+            updateCrystalCounters();
+            renderCustomGrids();
+            updatePreviewCanvas();
+        };
+        hatsGrid.appendChild(slot);
+    });
+
+    const eyesGrid = document.getElementById('eyesGrid');
+    eyesGrid.innerHTML = '';
+    EYES_DB.forEach(e => {
+        const isUnlocked = unlockedEyes.includes(e.id);
+        const isEquipped = userEquippedEye === e.id;
+        const slot = document.createElement('div');
+        slot.className = `item-slot ${isUnlocked ? 'available' : 'locked'} ${isEquipped ? 'active' : ''}`;
+        slot.innerHTML = `<span>${e.icon}</span><span class="item-price-tag">${isUnlocked ? (isEquipped ? 'НАДЕТО' : 'ВЗЯТЬ') : e.price + ' 💎'}</span>`;
+        slot.onclick = () => {
+            if (isUnlocked) {
+                userEquippedEye = e.id;
+                localStorage.setItem('cyber_jump_eye', userEquippedEye);
+            } else {
+                if (totalCrystals >= e.price) {
+                    totalCrystals -= e.price;
+                    localStorage.setItem('cyber_jump_crystals', totalCrystals);
+                    unlockedEyes.push(e.id);
+                    localStorage.setItem('cyber_jump_unlocked_eyes', JSON.stringify(unlockedEyes));
+                    userEquippedEye = e.id;
+                    localStorage.setItem('cyber_jump_eye', userEquippedEye);
+                    playSound('crystal_pickup');
+                } else {
+                    alert('Недостаточно кристаллов!');
+                }
+            }
+            updateCrystalCounters();
+            renderCustomGrids();
+            updatePreviewCanvas();
+        };
+        eyesGrid.appendChild(slot);
+    });
+
+    const aurasGrid = document.getElementById('aurasGrid');
+    aurasGrid.innerHTML = '';
+    AURAS_DB.forEach(a => {
+        const isUnlocked = unlockedAuras.includes(a.id);
+        const isEquipped = userEquippedAura === a.id;
+        const slot = document.createElement('div');
+        slot.className = `item-slot ${isUnlocked ? 'available' : 'locked'} ${isEquipped ? 'active' : ''}`;
+        slot.innerHTML = `<span>${a.icon}</span><span class="item-price-tag">${isUnlocked ? (isEquipped ? 'НАДЕТО' : 'ВЗЯТЬ') : a.price + ' 💎'}</span>`;
+        slot.onclick = () => {
+            if (isUnlocked) {
+                userEquippedAura = (userEquippedAura === a.id) ? 'none' : a.id;
+                localStorage.setItem('cyber_jump_aura', userEquippedAura);
+            } else {
+                if (totalCrystals >= a.price) {
+                    totalCrystals -= a.price;
+                    localStorage.setItem('cyber_jump_crystals', totalCrystals);
+                    unlockedAuras.push(a.id);
+                    localStorage.setItem('cyber_jump_unlocked_auras', JSON.stringify(unlockedAuras));
+                    userEquippedAura = a.id;
+                    localStorage.setItem('cyber_jump_aura', userEquippedAura);
+                    playSound('crystal_pickup');
+                } else {
+                    alert('Недостаточно кристаллов!');
+                }
+            }
+            updateCrystalCounters();
+            renderCustomGrids();
+            updatePreviewCanvas();
+        };
+        aurasGrid.appendChild(slot);
+    });
 }
 
 function initCustomizationUI() {
@@ -877,8 +1741,10 @@ function initCustomizationUI() {
         chip.onclick = () => selectSkinColor(col);
         container.appendChild(chip);
     });
-    updateCustomUI();
+    renderCustomGrids();
+    updateCrystalCounters();
     updatePreviewCanvas();
+    updateDevToolsUI();
 }
 
 function selectSkinColor(col) {
@@ -920,6 +1786,8 @@ function updatePreviewCanvas() {
     pCtx.fillStyle = userSkinColor;
     pCtx.fillRect(cx - 15, cy + 40, 58, 2);
 
+    drawEquippedAura(pCtx, cx, cy);
+
     pCtx.fillStyle = userSkinColor;
     pCtx.shadowBlur = 12;
     pCtx.shadowColor = userSkinColor;
@@ -937,6 +1805,7 @@ const devState = {
 };
 
 function toggleDevOption(opt) {
+    if (!devToolsUnlocked) return;
     if (opt === 'noclip') {
         devState.noclip = !devState.noclip;
         const btn = document.getElementById('devNoclip');
@@ -951,6 +1820,7 @@ function toggleDevOption(opt) {
 }
 
 function triggerDevAction(act) {
+    if (!devToolsUnlocked) return;
     if (act === 'jetpack') {
         player.jetpackTimer = 300;
         playSound('jetpack');
@@ -968,7 +1838,7 @@ function resizeCanvas() {
     generateWorldAssets();
 }
 
-// --- ЗВУКОВОЙ ДВИЖОК ---
+// --- ЗВУКОВОЙ ДВИЖОК С УЧЕТОМ НАСТРОЕК ---
 let audioCtx = null;
 let soundEnabled = true;
 
@@ -1001,65 +1871,83 @@ function playSound(type) {
     initAudio();
     if (!audioCtx) return;
 
+    const masterMult = (audioSettings.master / 100);
+    if (masterMult <= 0) return;
+
+    let category = 'sfx';
+    if (type === 'crystal_pickup') category = 'ui';
+    else if (type === 'crt_hum' || type === 'bios_beep') category = 'synth';
+
+    const catMult = (audioSettings[category] / 100);
+    const finalVolume = masterMult * catMult;
+    if (finalVolume <= 0) return;
+
     const now = audioCtx.currentTime;
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     osc.connect(gain);
     gain.connect(audioCtx.destination);
 
-    if (type === 'crt_hum') {
+    if (type === 'crystal_pickup') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(1200, now);
+        osc.frequency.exponentialRampToValueAtTime(2400, now + 0.12);
+        gain.gain.setValueAtTime(0.22 * finalVolume, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.12);
+        osc.start(now); osc.stop(now + 0.12);
+    } else if (type === 'crt_hum') {
         osc.type = 'sawtooth';
         osc.frequency.setValueAtTime(50, now);
         osc.frequency.exponentialRampToValueAtTime(120, now + 0.3);
-        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.setValueAtTime(0.25 * finalVolume, now);
         gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
         osc.start(now); osc.stop(now + 0.3);
     } else if (type === 'bios_beep') {
         osc.type = 'square';
         osc.frequency.setValueAtTime(880, now);
-        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.setValueAtTime(0.08 * finalVolume, now);
         gain.gain.linearRampToValueAtTime(0.01, now + 0.08);
         osc.start(now); osc.stop(now + 0.08);
     } else if (type === 'bounce') {
         osc.type = 'sine';
         osc.frequency.setValueAtTime(320, now);
         osc.frequency.exponentialRampToValueAtTime(950, now + 0.15);
-        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.setValueAtTime(0.2 * finalVolume, now);
         gain.gain.linearRampToValueAtTime(0.01, now + 0.15);
         osc.start(now); osc.stop(now + 0.15);
     } else if (type === 'spring') {
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(400, now);
         osc.frequency.linearRampToValueAtTime(1500, now + 0.3);
-        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.setValueAtTime(0.25 * finalVolume, now);
         gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
         osc.start(now); osc.stop(now + 0.3);
     } else if (type === 'shoot') {
         osc.type = 'sawtooth';
         osc.frequency.setValueAtTime(1000, now);
         osc.frequency.exponentialRampToValueAtTime(150, now + 0.08);
-        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.setValueAtTime(0.12 * finalVolume, now);
         gain.gain.linearRampToValueAtTime(0.01, now + 0.08);
         osc.start(now); osc.stop(now + 0.08);
     } else if (type === 'drone_zap') {
         osc.type = 'square';
         osc.frequency.setValueAtTime(600, now);
         osc.frequency.linearRampToValueAtTime(200, now + 0.12);
-        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.setValueAtTime(0.15 * finalVolume, now);
         gain.gain.linearRampToValueAtTime(0.01, now + 0.12);
         osc.start(now); osc.stop(now + 0.12);
     } else if (type === 'jetpack') {
         osc.type = 'sawtooth';
         osc.frequency.setValueAtTime(150, now);
         osc.frequency.linearRampToValueAtTime(450, now + 0.35);
-        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.setValueAtTime(0.2 * finalVolume, now);
         gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
         osc.start(now); osc.stop(now + 0.35);
     } else if (type === 'die') {
         osc.type = 'sawtooth';
         osc.frequency.setValueAtTime(400, now);
         osc.frequency.linearRampToValueAtTime(40, now + 0.8);
-        gain.gain.setValueAtTime(0.35, now);
+        gain.gain.setValueAtTime(0.35 * finalVolume, now);
         gain.gain.linearRampToValueAtTime(0.01, now + 0.8);
         osc.start(now); osc.stop(now + 0.8);
     }
@@ -1070,6 +1958,7 @@ btnPause.onclick = togglePause;
 function togglePause() {
     if (gameState === 'PLAYING') {
         gameState = 'PAUSED';
+        updateDevToolsUI();
         pauseMenu.classList.remove('hidden');
     } else if (gameState === 'PAUSED') {
         gameState = 'PLAYING';
@@ -1077,9 +1966,10 @@ function togglePause() {
     }
 }
 
-// ПЕРЕХОД В ГЛАВНОЕ МЕНЮ ИЗ ПАУЗЫ
 function goToMainMenu() {
     pauseMenu.classList.add('hidden');
+    settingsMenu.classList.add('hidden');
+    modeSelectMenu.classList.add('hidden');
     topControls.style.display = 'none';
     hud.style.display = 'none';
     controlsLayer.style.display = 'none';
@@ -1096,14 +1986,13 @@ function goToMainMenu() {
     enemies = [];
     springs = [];
     powerups = [];
+    crystals = [];
     meteors = [];
 
-    if (menuHighScoreEl) {
-        menuHighScoreEl.innerText = highScore;
-    }
+    if (menuHighScoreEl) menuHighScoreEl.innerText = highScore;
+    updateCrystalCounters();
 }
 
-// --- ВСЕЛЕННАЯ И АТМОСФЕРА ---
 let bgBuildingsFar = [];
 let bgBuildingsNear = [];
 let bgStars = [];
@@ -1125,7 +2014,9 @@ function generateWorldAssets() {
     satellites = [];
     giantStars = [];
 
-    for (let i = 0; i < 180; i++) {
+    const starCount = (graphicsTier === 'low') ? 90 : (graphicsTier === 'high' ? 260 : 180);
+
+    for (let i = 0; i < starCount; i++) {
         bgStars.push({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height * 5,
@@ -1176,63 +2067,11 @@ function generateWorldAssets() {
     ];
 
     cosmicPlanets = [
-        {
-            name: 'MOON',
-            x: canvas.width * 0.2,
-            worldY: -1200,
-            radius: 38,
-            type: 'moon',
-            labelColor: '#aaaaaa',
-            satellites: [
-                { orbitRadius: 65, angle: 0, speed: 0.02, size: 5, color: '#888' }
-            ]
-        },
-        {
-            name: 'MARS',
-            x: canvas.width * 0.75,
-            worldY: -3500,
-            radius: 50,
-            type: 'mars',
-            labelColor: '#ff5533',
-            satellites: [
-                { orbitRadius: 85, angle: 1.5, speed: 0.015, size: 4, color: '#ffa500' },
-                { orbitRadius: 110, angle: 3.0, speed: 0.01, size: 6, color: '#ccc' }
-            ]
-        },
-        {
-            name: 'JUPITER',
-            x: canvas.width * 0.25,
-            worldY: -7500,
-            radius: 85,
-            type: 'jupiter',
-            labelColor: '#ffaa44',
-            satellites: [
-                { orbitRadius: 130, angle: 0.5, speed: 0.008, size: 7, color: '#e0e0e0' }
-            ]
-        },
-        {
-            name: 'SATURN',
-            x: canvas.width * 0.7,
-            worldY: -13000,
-            radius: 65,
-            type: 'saturn',
-            labelColor: '#ffe066',
-            satellites: [
-                { orbitRadius: 120, angle: 2.2, speed: 0.012, size: 5, color: '#ffffff' },
-                { orbitRadius: 155, angle: 4.1, speed: 0.006, size: 8, color: '#ffcc99' }
-            ]
-        },
-        {
-            name: 'NEPTUNE',
-            x: canvas.width * 0.3,
-            worldY: -19000,
-            radius: 58,
-            type: 'neptune',
-            labelColor: '#00bbff',
-            satellites: [
-                { orbitRadius: 90, angle: 1.1, speed: 0.018, size: 5, color: '#00ffff' }
-            ]
-        }
+        { name: 'MOON', x: canvas.width * 0.2, worldY: -1200, radius: 38, type: 'moon', labelColor: '#d0d8e8' },
+        { name: 'MARS', x: canvas.width * 0.75, worldY: -3500, radius: 50, type: 'mars', labelColor: '#ff5533' },
+        { name: 'JUPITER', x: canvas.width * 0.25, worldY: -7500, radius: 85, type: 'jupiter', labelColor: '#ffaa44' },
+        { name: 'SATURN', x: canvas.width * 0.7, worldY: -13000, radius: 65, type: 'saturn', labelColor: '#ffe066' },
+        { name: 'NEPTUNE', x: canvas.width * 0.3, worldY: -19000, radius: 58, type: 'neptune', labelColor: '#00bbff' }
     ];
 
     for (let i = 0; i < 5; i++) {
@@ -1267,15 +2106,9 @@ function interpolateColor(color1, color2, factor) {
     return `rgb(${r},${g},${b})`;
 }
 
-// --- СОСТОЯНИЯ ИГРЫ ---
 let gameState = 'MAIN_MENU';
 let bootTime = 0;
 let ramCount = 0;
-
-function startFromMainMenu() {
-    mainMenu.classList.add('hidden');
-    triggerCRTBoot();
-}
 
 function triggerCRTBoot() {
     gameState = 'CRT_BOOT';
@@ -1289,6 +2122,8 @@ function startGame() {
     pauseMenu.classList.add('hidden');
     gameOverMenu.classList.add('hidden');
     customMenu.classList.add('hidden');
+    settingsMenu.classList.add('hidden');
+    modeSelectMenu.classList.add('hidden');
     topControls.style.display = 'flex';
     hud.style.display = 'block';
     controlsLayer.style.display = 'flex';
@@ -1297,6 +2132,7 @@ function startGame() {
     platforms = [];
     springs = [];
     powerups = [];
+    crystals = [];
     enemies = [];
     bullets = [];
     particles = [];
@@ -1306,6 +2142,8 @@ function startGame() {
     texturedMeteors = [];
     shatteredPieces = [];
     comboCount = 0;
+    sessionRunCrystals = 0;
+    updateCrystalCounters();
 
     player.x = canvas.width / 2 - player.width / 2;
     player.y = canvas.height - 150;
@@ -1365,6 +2203,7 @@ let cameraShake = 0;
 let highScore = localStorage.getItem('cyber_jump_hs') || 0;
 highScoreEl.innerText = highScore;
 if (menuHighScoreEl) menuHighScoreEl.innerText = highScore;
+updateCrystalCounters();
 
 function shatterPlatformIntoPieces(plat, blastOriginX, blastOriginY, pieceCount = 5, isCenterTrap = false) {
     const w = plat.width / pieceCount;
@@ -1373,7 +2212,7 @@ function shatterPlatformIntoPieces(plat, blastOriginX, blastOriginY, pieceCount 
         const py = plat.y + plat.height / 2;
         const dx = px - (blastOriginX !== undefined ? blastOriginX : px);
         const dy = py - (blastOriginY !== undefined ? blastOriginY : py);
-        const baseSpeed = isCenterTrap ? (9 + Math.random() * 7) : (7 + Math.random() * 6);
+        const baseSpeed = isCenterTrap ? (10 + Math.random() * 8) : (8 + Math.random() * 7);
         const angle = Math.atan2(dy, dx) + (Math.random() - 0.5) * 0.4;
 
         let pieceColor = '#00f0ff';
@@ -1393,7 +2232,7 @@ function shatterPlatformIntoPieces(plat, blastOriginX, blastOriginY, pieceCount 
             rotSpeed: (Math.random() - 0.5) * 0.35,
             color: pieceColor,
             alpha: 1.0,
-            decay: 0.018 + Math.random() * 0.012
+            decay: 0.016 + Math.random() * 0.010
         });
     }
 }
@@ -1428,6 +2267,16 @@ function generateWorldAbove(targetY) {
             destroyedByBlast: false
         };
         platforms.push(plat);
+
+        if (Math.random() < 0.22) {
+            crystals.push({
+                plat,
+                offsetX: width / 2 - 8,
+                width: 16,
+                height: 20,
+                collected: false
+            });
+        }
 
         if (type === 'normal' && Math.random() < 0.08) {
             springs.push({ x: x + width / 2 - 12, y: highestY - 14, width: 24, height: 14, plat, animTimer: 0 });
@@ -1481,8 +2330,21 @@ function registerTrapTap() {
     return false;
 }
 
+// --- УПРАВЛЕНИЕ С ПОДДЕРЖКОЙ РЕБИНДА ---
 function setupInput() {
     window.addEventListener('keydown', (e) => {
+        if (currentlyRebinding) {
+            e.preventDefault();
+            if (e.code !== 'Escape') {
+                customBinds[currentlyRebinding] = e.code;
+                localStorage.setItem('cyber_jump_binds', JSON.stringify(customBinds));
+                playSound('bounce');
+            }
+            currentlyRebinding = null;
+            updateControlsUI();
+            return;
+        }
+
         if (gameState === 'MAIN_MENU' && (e.key === 'Enter' || e.code === 'Enter' || e.code === 'NumpadEnter')) {
             startFromMainMenu();
             return;
@@ -1493,44 +2355,48 @@ function setupInput() {
                 closeCustomMenu();
                 return;
             }
+            if (!settingsMenu.classList.contains('hidden')) {
+                closeSettingsMenu();
+                return;
+            }
+            if (!modeSelectMenu.classList.contains('hidden')) {
+                closeModeSelectMenu();
+                return;
+            }
             togglePause();
+            return;
         }
 
         if (gameState !== 'PLAYING') return;
 
-        if (e.code === 'KeyA' || e.key === 'ArrowLeft' || ['a', 'A', 'ф', 'Ф'].includes(e.key)) {
+        if (e.code === customBinds.left || e.key === 'ArrowLeft') {
             keys.left = true;
         }
-        if (e.code === 'KeyD' || e.key === 'ArrowRight' || ['d', 'D', 'в', 'В'].includes(e.key)) {
+        if (e.code === customBinds.right || e.key === 'ArrowRight') {
             keys.right = true;
         }
-        if (e.code === 'KeyW' || e.key === 'ArrowUp' || ['w', 'W', 'ц', 'Ц'].includes(e.key)) {
-            keys.up = true;
-        }
-        if (e.code === 'KeyS' || e.key === 'ArrowDown' || ['s', 'S', 'ы', 'Ы'].includes(e.key)) {
-            keys.down = true;
-        }
 
-        if (e.code === 'KeyE' || e.code === 'Space' || e.key === ' ' || ['e', 'E', 'у', 'У'].includes(e.key)) {
+        if (e.code === customBinds.shoot) {
             const trapHandled = registerTrapTap();
             if (!trapHandled) {
+                shoot();
+            }
+        }
+
+        if (e.code === customBinds.trap) {
+            const trapHandled = registerTrapTap();
+            if (!trapHandled && customBinds.shoot === 'Space') {
                 shoot();
             }
         }
     });
 
     window.addEventListener('keyup', (e) => {
-        if (e.code === 'KeyA' || e.key === 'ArrowLeft' || ['a', 'A', 'ф', 'Ф'].includes(e.key)) {
+        if (e.code === customBinds.left || e.key === 'ArrowLeft') {
             keys.left = false;
         }
-        if (e.code === 'KeyD' || e.key === 'ArrowRight' || ['d', 'D', 'в', 'В'].includes(e.key)) {
+        if (e.code === customBinds.right || e.key === 'ArrowRight') {
             keys.right = false;
-        }
-        if (e.code === 'KeyW' || e.key === 'ArrowUp' || ['w', 'W', 'ц', 'Ц'].includes(e.key)) {
-            keys.up = false;
-        }
-        if (e.code === 'KeyS' || e.key === 'ArrowDown' || ['s', 'S', 'ы', 'Ы'].includes(e.key)) {
-            keys.down = false;
         }
     });
 
@@ -1559,8 +2425,12 @@ function createShockwave(x, y, color) {
 }
 
 function createParticles(x, y, count, color, speedScale = 1) {
-    for (let i = 0; i < count; i++) {
-        if (particles.length > 90) particles.shift();
+    const gfxMult = (graphicsTier === 'low') ? 0.4 : (graphicsTier === 'high' ? 1.6 : 1.0);
+    const finalCount = Math.max(1, Math.round(count * gfxMult));
+    const maxPool = (graphicsTier === 'low') ? 40 : (graphicsTier === 'high' ? 180 : 90);
+
+    for (let i = 0; i < finalCount; i++) {
+        if (particles.length > maxPool) particles.shift();
         particles.push({
             x, y,
             vx: (Math.random() - 0.5) * 10 * speedScale,
@@ -1577,7 +2447,7 @@ function startDeathAnimation() {
     if (devState.godmode || devState.noclip || player.invulnerableTimer > 0) return;
     if (gameState === 'DYING' || gameState === 'GAMEOVER') return;
     gameState = 'DYING';
-    player.vy = -7;
+    if (player.vy >= 0) player.vy = -8;
     player.jetpackTimer = 0;
     playSound('die');
 }
@@ -1658,9 +2528,6 @@ function update() {
         });
         menuSparks = menuSparks.filter(s => s.alpha > 0);
 
-        cosmicPlanets.forEach(pl => {
-            if (pl.satellites) pl.satellites.forEach(sat => sat.angle += sat.speed);
-        });
         return;
     }
 
@@ -1676,13 +2543,31 @@ function update() {
         return;
     }
 
+    // ИСПРАВЛЕНИЕ: во время смерти продолжаем физику разлета осколков и эффектов без остановки
     if (gameState === 'DYING') {
-        player.vy += gravity * 1.2;
+        player.vy += gravity * 1.1;
         player.y += player.vy;
+        player.x += player.vx;
         player.angle += 0.22;
-        if (cameraShake > 0) cameraShake *= 0.88;
+        if (cameraShake > 0) cameraShake *= 0.90;
 
-        if (player.y > cameraY + canvas.height + 120) {
+        shatteredPieces.forEach(sp => {
+            sp.x += sp.vx;
+            sp.y += sp.vy;
+            sp.vy += 0.38;
+            sp.vx *= 0.98;
+            sp.angle += sp.rotSpeed;
+            sp.alpha -= sp.decay;
+        });
+        shatteredPieces = shatteredPieces.filter(sp => sp.alpha > 0);
+
+        particles.forEach(p => { p.x += p.vx; p.y += p.vy; p.life -= p.decay; });
+        particles = particles.filter(p => p.life > 0);
+
+        shockwaves.forEach(sw => { sw.radius += 4; sw.alpha -= 0.04; });
+        shockwaves = shockwaves.filter(sw => sw.alpha > 0);
+
+        if (player.y > cameraY + canvas.height + 150) {
             gameOver();
         }
         return;
@@ -1740,14 +2625,6 @@ function update() {
     });
     texturedMeteors = texturedMeteors.filter(tm => tm.life > 0);
 
-    cosmicPlanets.forEach(pl => {
-        if (pl.satellites) {
-            pl.satellites.forEach(sat => {
-                sat.angle += sat.speed;
-            });
-        }
-    });
-
     satellites.forEach(s => {
         s.x += s.speed;
         if (s.x > canvas.width + 50) s.x = -50;
@@ -1796,8 +2673,9 @@ function update() {
     if (player.x < -player.width) player.x = canvas.width;
     if (player.x > canvas.width) player.x = -player.width;
 
+    const trailMax = (graphicsTier === 'low') ? 3 : (graphicsTier === 'high' ? 12 : 6);
     player.trail.push({ x: player.x, y: player.y, alpha: 0.6, scaleX: player.scaleX, scaleY: player.scaleY });
-    if (player.trail.length > 6) player.trail.shift();
+    if (player.trail.length > trailMax) player.trail.shift();
 
     if (player.y < cameraY + canvas.height * 0.48) {
         const diff = (cameraY + canvas.height * 0.48) - player.y;
@@ -1811,6 +2689,31 @@ function update() {
     }
 
     generateWorldAbove(cameraY);
+
+    // СБОР КРИСТАЛЛОВ
+    crystals.forEach(cr => {
+        if (cr.collected || cr.plat.destroyedByBlast) return;
+        const crystalRealX = cr.plat.x + cr.offsetX;
+        const floatAnim = Math.sin(animTicks * 0.12 + cr.plat.x) * 4;
+        const crystalRealY = cr.plat.y - 24 + floatAnim;
+
+        if (
+            player.x < crystalRealX + cr.width &&
+            player.x + player.width > crystalRealX &&
+            player.y < crystalRealY + cr.height &&
+            player.y + player.height > crystalRealY
+        ) {
+            cr.collected = true;
+            sessionRunCrystals++;
+            totalCrystals++;
+            localStorage.setItem('cyber_jump_crystals', totalCrystals);
+            updateCrystalCounters();
+            playSound('crystal_pickup');
+            addFloatingText('+1 💎', crystalRealX, crystalRealY - 10, '#00ffff');
+            createParticles(crystalRealX + 8, crystalRealY + 10, 14, '#00f0ff', 1.4);
+            createShockwave(crystalRealX + 8, crystalRealY + 10, '#00f0ff');
+        }
+    });
 
     if (!devState.noclip) {
         platforms.forEach(plat => {
@@ -1843,6 +2746,7 @@ function update() {
                 }
             }
 
+            // ИСПРАВЛЕНИЕ: ВРЕМЯ ЗАХВАТА 2 СЕКУНДЫ (120 ТИКОВ)
             if (plat.type === 'trap' && plat.trapActive) {
                 player.x = plat.x + plat.width / 2 - player.width / 2;
                 player.y = plat.y - player.height;
@@ -1850,7 +2754,7 @@ function update() {
                 player.vy = 0;
                 plat.trapTimer--;
 
-                if (plat.trapTimer % 25 === 0) {
+                if (plat.trapTimer % 15 === 0) {
                     playSound('bios_beep');
                     cameraShake = Math.max(cameraShake, 2);
                 }
@@ -1867,6 +2771,7 @@ function update() {
                     createShockwave(plat.x + plat.width / 2, plat.y, '#00ff88');
                     createParticles(plat.x + plat.width / 2, plat.y, 35, '#ffff00', 2.2);
                 } 
+                // ВЗРЫВ: осколки разлетаются динамично, игра не стопорится
                 else if (plat.trapTimer <= 0) {
                     plat.trapActive = false;
                     plat.destroyedByBlast = true;
@@ -1874,12 +2779,12 @@ function update() {
                     const blastX = plat.x + plat.width / 2;
                     const blastY = plat.y + plat.height / 2;
 
-                    cameraShake = 28;
+                    cameraShake = 30;
                     playSound('die');
                     createShockwave(blastX, blastY, '#ff0055');
                     createShockwave(blastX, blastY, '#ffd700');
-                    createParticles(blastX, blastY, 60, '#ff3300', 3.5);
-                    createParticles(blastX, blastY, 40, '#ffd700', 2.8);
+                    createParticles(blastX, blastY, 70, '#ff3300', 3.8);
+                    createParticles(blastX, blastY, 45, '#ffd700', 3.0);
                     addFloatingText('DETONATED!', plat.x, plat.y - 20, '#ff0000');
 
                     shatterPlatformIntoPieces(plat, blastX, blastY, 5, true);
@@ -1894,11 +2799,13 @@ function update() {
                                 otherPlat.destroyedByBlast = true;
                                 shatterPlatformIntoPieces(otherPlat, blastX, blastY, 5, false);
                                 createShockwave(opX, opY, '#ff5500');
-                                createParticles(opX, opY, 20, '#ffaa00', 2.0);
+                                createParticles(opX, opY, 25, '#ffaa00', 2.2);
                             }
                         }
                     });
 
+                    player.vy = -12;
+                    player.vx = (Math.random() - 0.5) * 10;
                     startDeathAnimation();
                 }
             }
@@ -1970,13 +2877,13 @@ function update() {
                 else if (plat.type === 'trap') {
                     if (!plat.trapDisarmed && !plat.trapActive) {
                         plat.trapActive = true;
-                        plat.trapTimer = 240;
+                        plat.trapTimer = 120; // 2 секунды
                         plat.trapTaps = 0;
                         player.vy = 0;
                         player.vx = 0;
                         cameraShake = 7;
                         playSound('drone_zap');
-                        addFloatingText('TRAP! TAP 10X!', plat.x, plat.y - 20, '#ffff00');
+                        addFloatingText('TRAP! TAP 10X [2s]!', plat.x, plat.y - 20, '#ffff00');
                     } else if (plat.trapDisarmed) {
                         player.vy = -jumpForce;
                         player.scaleX = 1.5; player.scaleY = 0.5;
@@ -2100,6 +3007,7 @@ function update() {
         return p.y < cameraY + canvas.height + 60;
     });
 
+    crystals = crystals.filter(c => !c.collected && !c.plat.destroyedByBlast && c.plat.y < cameraY + canvas.height + 60);
     springs = springs.filter(s => s.y < cameraY + canvas.height + 60);
     powerups = powerups.filter(p => !p.collected && p.y < cameraY + canvas.height + 60);
     enemies = enemies.filter(e => e.alive && e.y < cameraY + canvas.height + 60);
@@ -2119,6 +3027,9 @@ function update() {
 function gameOver() {
     gameState = 'GAMEOVER';
     finalScoreEl.innerText = maxScore;
+    if (gameOverRunCrystalsEl) gameOverRunCrystalsEl.innerText = sessionRunCrystals;
+    if (gameOverTotalCrystalsEl) gameOverTotalCrystalsEl.innerText = totalCrystals;
+
     if (maxScore > highScore) {
         highScore = maxScore;
         localStorage.setItem('cyber_jump_hs', highScore);
@@ -2128,67 +3039,29 @@ function gameOver() {
     gameOverMenu.classList.remove('hidden');
 }
 
-// --- ОТРИСОВКА ПЛАНЕТ В ИГРЕ ---
+// --- ИСПРАВЛЕНИЕ: ЛУНА ТЕПЕРЬ РЕАЛИСТИЧНО СЕРЕБРИСТО-СЕРАЯ, А НЕ КРАСНАЯ ---
 function drawPlanet(pl, screenY) {
     ctx.save();
     ctx.translate(pl.x, screenY);
 
     if (pl.type === 'moon') {
-        const grad = ctx.createRadialGradient(-pl.radius*0.3, -pl.radius*0.3, 5, 0, 0, pl.radius);
-        grad.addColorStop(0, '#e0e0e0');
-        grad.addColorStop(0.7, '#888888');
-        grad.addColorStop(1, '#333333');
+        const grad = ctx.createRadialGradient(-pl.radius*0.3, -pl.radius*0.3, 4, 0, 0, pl.radius);
+        grad.addColorStop(0, '#f2f5fa');
+        grad.addColorStop(0.55, '#9aa0b0');
+        grad.addColorStop(0.85, '#565c6e');
+        grad.addColorStop(1, '#1e2230');
         ctx.fillStyle = grad;
         ctx.beginPath();
         ctx.arc(0, 0, pl.radius, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.fillStyle = 'rgba(40, 40, 40, 0.45)';
+        // Серые лунные кратеры
+        ctx.fillStyle = 'rgba(35, 40, 55, 0.45)';
         ctx.beginPath(); ctx.arc(-12, -10, 10, 0, Math.PI * 2); ctx.fill();
         ctx.beginPath(); ctx.arc(14, 12, 14, 0, Math.PI * 2); ctx.fill();
         ctx.beginPath(); ctx.arc(-6, 18, 7, 0, Math.PI * 2); ctx.fill();
         ctx.beginPath(); ctx.arc(15, -15, 8, 0, Math.PI * 2); ctx.fill();
     }
-    else if (pl.type === 'mars') {
-        const grad = ctx.createRadialGradient(-pl.radius*0.3, -pl.radius*0.3, 5, 0, 0, pl.radius);
-        grad.addColorStop(0, '#ff7755');
-        grad.addColorStop(0.7, '#cc3311');
-        grad.addColorStop(1, '#660000');
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(0, 0, pl.radius, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = 'rgba(80, 10, 0, 0.5)';
-        ctx.beginPath(); ctx.arc(-15, -10, 12, 0, Math.PI * 2); ctx.fill();
-        ctx.beginPath(); ctx.arc(18, 14, 16, 0, Math.PI * 2); ctx.fill();
-        ctx.beginPath(); ctx.arc(-8, 20, 9, 0, Math.PI * 2); ctx.fill();
-        
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
-        ctx.beginPath();
-        ctx.arc(0, -pl.radius + 6, 14, 0, Math.PI);
-        ctx.fill();
-    } 
-    else if (pl.type === 'jupiter') {
-        ctx.beginPath();
-        ctx.arc(0, 0, pl.radius, 0, Math.PI * 2);
-        ctx.clip();
-
-        const grad = ctx.createLinearGradient(0, -pl.radius, 0, pl.radius);
-        grad.addColorStop(0, '#cc8844');
-        grad.addColorStop(0.2, '#eebbbb');
-        grad.addColorStop(0.4, '#aa5522');
-        grad.addColorStop(0.6, '#ffddee');
-        grad.addColorStop(0.8, '#994411');
-        grad.addColorStop(1, '#552200');
-        ctx.fillStyle = grad;
-        ctx.fillRect(-pl.radius, -pl.radius, pl.radius * 2, pl.radius * 2);
-
-        ctx.fillStyle = '#cc2200';
-        ctx.beginPath();
-        ctx.ellipse(pl.radius * 0.3, pl.radius * 0.25, 20, 13, 0, 0, Math.PI * 2);
-        ctx.fill();
-    } 
     else if (pl.type === 'saturn') {
         ctx.strokeStyle = 'rgba(230, 200, 140, 0.7)';
         ctx.lineWidth = 14;
@@ -2211,32 +3084,15 @@ function drawPlanet(pl, screenY) {
         ctx.ellipse(0, 0, pl.radius * 2.2, pl.radius * 0.5, Math.PI / 6, 0, Math.PI);
         ctx.stroke();
     } 
-    else if (pl.type === 'neptune') {
-        const grad = ctx.createRadialGradient(-15, -15, 5, 0, 0, pl.radius);
-        grad.addColorStop(0, '#00d2ff');
-        grad.addColorStop(0.6, '#0040ff');
-        grad.addColorStop(1, '#000080');
+    else {
+        const grad = ctx.createRadialGradient(-pl.radius*0.3, -pl.radius*0.3, 5, 0, 0, pl.radius);
+        grad.addColorStop(0, '#ff7755');
+        grad.addColorStop(0.7, '#cc3311');
+        grad.addColorStop(1, '#660000');
         ctx.fillStyle = grad;
         ctx.beginPath();
         ctx.arc(0, 0, pl.radius, 0, Math.PI * 2);
         ctx.fill();
-
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.55)';
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.arc(0, 0, pl.radius - 6, 0.2, 1.8);
-        ctx.stroke();
-    }
-
-    if (pl.satellites) {
-        pl.satellites.forEach(sat => {
-            const sx = Math.cos(sat.angle) * sat.orbitRadius;
-            const sy = Math.sin(sat.angle) * (sat.orbitRadius * 0.4);
-            ctx.fillStyle = sat.color;
-            ctx.beginPath();
-            ctx.arc(sx, sy, sat.size, 0, Math.PI * 2);
-            ctx.fill();
-        });
     }
 
     ctx.font = '900 12px Orbitron';
@@ -2247,14 +3103,11 @@ function drawPlanet(pl, screenY) {
     ctx.restore();
 }
 
-// --- РЕНДЕР ЧЕРНОЙ ДЫРЫ С АККРЕЦИОННЫМ ДИСКОМ И ЛИНЗИРОВАНИЕМ ---
 function drawBlackHole(bx, by, radius) {
     ctx.save();
     ctx.translate(bx, by);
-
     const spin = animTicks * 0.035;
 
-    // Внешний вихревой аккреционный диск
     ctx.globalCompositeOperation = 'lighter';
     const diskGrad = ctx.createRadialGradient(0, 0, radius * 0.8, 0, 0, radius * 2.8);
     diskGrad.addColorStop(0, 'rgba(255, 240, 200, 0.85)');
@@ -2263,7 +3116,7 @@ function drawBlackHole(bx, by, radius) {
     diskGrad.addColorStop(1, 'rgba(0, 240, 255, 0)');
 
     ctx.save();
-    ctx.rotate(0.35); // наклон диска к наблюдателю
+    ctx.rotate(0.35);
     ctx.scale(1.0, 0.42);
 
     ctx.fillStyle = diskGrad;
@@ -2271,7 +3124,6 @@ function drawBlackHole(bx, by, radius) {
     ctx.arc(0, 0, radius * 2.8, 0, Math.PI * 2);
     ctx.fill();
 
-    // Спиральные плазменные струи аккреции
     ctx.lineWidth = 3;
     for (let i = 0; i < 4; i++) {
         const a = spin + (i * Math.PI) / 2;
@@ -2282,7 +3134,6 @@ function drawBlackHole(bx, by, radius) {
     }
     ctx.restore();
 
-    // Гравитационное фотонное кольцо (lensing halo)
     const ringGrad = ctx.createRadialGradient(0, 0, radius * 0.9, 0, 0, radius * 1.35);
     ringGrad.addColorStop(0, '#ffffff');
     ringGrad.addColorStop(0.5, '#ffd700');
@@ -2293,14 +3144,11 @@ function drawBlackHole(bx, by, radius) {
     ctx.fill();
 
     ctx.globalCompositeOperation = 'source-over';
-
-    // Горизонт событий (абсолютно черное ядро)
     ctx.fillStyle = '#000003';
     ctx.beginPath();
     ctx.arc(0, 0, radius, 0, Math.PI * 2);
     ctx.fill();
 
-    // Тонкий световой ободок на кромке горизонта
     ctx.strokeStyle = '#fff';
     ctx.lineWidth = 1.5;
     ctx.beginPath();
@@ -2310,7 +3158,6 @@ function drawBlackHole(bx, by, radius) {
     ctx.restore();
 }
 
-// --- РЕНДЕР ТЕКСТУРИРОВАННЫХ МЕТЕОРОВ ---
 function drawTexturedMeteor(tm, renderYOverride) {
     ctx.save();
     const renderY = renderYOverride !== undefined ? renderYOverride : tm.y - cameraY;
@@ -2347,7 +3194,6 @@ function drawTexturedMeteor(tm, renderYOverride) {
     ctx.restore();
 }
 
-// --- CRT БИОС DRAW ---
 function drawCRTBoot() {
     ctx.fillStyle = '#02020a';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -2383,14 +3229,14 @@ function drawCRTBoot() {
     if (bootTime > 80) {
         ctx.fillStyle = '#ffff00';
         ctx.fillText("PRIMARY MASTER: SATURN_ORBIT_MAP", 25, 125);
-        ctx.fillText("SECONDARY MASTER: BLACK_HOLE_SINGULARITY_ENGINE", 25, 148);
+        ctx.fillText("SECONDARY MASTER: CRYSTAL_RESONANCE_MATRIX", 25, 148);
     }
 
     if (bootTime > 130) {
         ctx.fillStyle = '#00ff66';
         ctx.fillText("> INITIALIZING CORE ENGINE...", 25, 190);
         ctx.fillText("> LOADING SATURN_TEXTURES ... OK", 25, 213);
-        ctx.fillText("> COMPILING METEOR_TEXTURES_MODULE ... OK", 25, 236);
+        ctx.fillText("> COMPILING CRYSTAL_MODULE ... OK", 25, 236);
         ctx.fillText("> MOUNTING AUDIO SYNTHESIZER ... OK", 25, 259);
     }
 
@@ -2412,7 +3258,6 @@ function drawCRTBoot() {
     ctx.restore();
 }
 
-// --- ОТРИСОВКА ГЛАВНОГО МЕНЮ: ТОЛЬКО САТУРН, ЧЁРНЫЕ ДЫРЫ И ЗВЁЗДЫ БЕЗ НАСЛОЕНИЙ ---
 function drawMainMenu() {
     ctx.save();
 
@@ -2423,7 +3268,6 @@ function drawMainMenu() {
     ctx.fillStyle = skyGrad;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // 1. Космические туманности без наложений
     ctx.globalCompositeOperation = 'lighter';
     const menuNebulae = [
         { x: canvas.width * 0.22, y: canvas.height * 0.20, radius: 240, color: 'rgba(0, 240, 255, ' },
@@ -2439,7 +3283,6 @@ function drawMainMenu() {
         ctx.fill();
     });
 
-    // 2. Разнесенные пульсирующие гигантские звезды глубокого космоса с коронами
     const spacedStars = [
         { x: canvas.width * 0.14, y: canvas.height * 0.34, r: 24, core: '#ffffff', corona: 'rgba(0, 240, 255, 0.45)', speed: 0.03 },
         { x: canvas.width * 0.86, y: canvas.height * 0.14, r: 28, core: '#fff4b8', corona: 'rgba(255, 0, 119, 0.40)', speed: 0.025 },
@@ -2458,18 +3301,19 @@ function drawMainMenu() {
         ctx.arc(gs.x, gs.y, curR, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.strokeStyle = gs.corona;
-        ctx.lineWidth = 1.2;
-        ctx.beginPath();
-        ctx.moveTo(gs.x - curR * 1.5, gs.y);
-        ctx.lineTo(gs.x + curR * 1.5, gs.y);
-        ctx.moveTo(gs.x, gs.y - curR * 1.5);
-        ctx.lineTo(gs.x, gs.y + curR * 1.5);
-        ctx.stroke();
+        if (graphicsTier !== 'low') {
+            ctx.strokeStyle = gs.corona;
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            ctx.moveTo(gs.x - curR * 1.5, gs.y);
+            ctx.lineTo(gs.x + curR * 1.5, gs.y);
+            ctx.moveTo(gs.x, gs.y - curR * 1.5);
+            ctx.lineTo(gs.x, gs.y + curR * 1.5);
+            ctx.stroke();
+        }
     });
     ctx.globalCompositeOperation = 'source-over';
 
-    // 3. Плотное звездное поле
     bgStars.forEach(st => {
         ctx.fillStyle = st.color;
         ctx.globalAlpha = st.alpha * (0.8 + Math.sin(animTicks * st.blinkSpeed) * 0.25);
@@ -2477,17 +3321,14 @@ function drawMainMenu() {
     });
     ctx.globalAlpha = 1.0;
 
-    // 4. Единственная планета меню: Сатурн (аккуратно вынесен в правый верхний сектор, без наслоений)
     const saturnY = canvas.height * 0.24;
     const origSaturnX = cosmicPlanets[3].x;
     cosmicPlanets[3].x = canvas.width * 0.82;
     drawPlanet(cosmicPlanets[3], saturnY);
     cosmicPlanets[3].x = origSaturnX;
 
-    // 5. Черная Дыра с аккреционным диском и линзированием (в левом секторе, отдельно от Сатурна)
     drawBlackHole(canvas.width * 0.24, canvas.height * 0.25, 26);
 
-    // 6. Пролетающие кометы
     ctx.strokeStyle = '#00f0ff';
     ctx.lineWidth = 2;
     meteors.forEach(m => {
@@ -2501,7 +3342,6 @@ function drawMainMenu() {
 
     texturedMeteors.forEach(tm => drawTexturedMeteor(tm, tm.y));
 
-    // 7. Плавающая фотонная пыль
     particles.forEach(p => {
         ctx.fillStyle = p.color;
         ctx.globalAlpha = p.life;
@@ -2509,7 +3349,6 @@ function drawMainMenu() {
     });
     ctx.globalAlpha = 1.0;
 
-    // Платформа главного меню
     const platY = Math.round(canvas.height * 0.68);
     const platW = 150;
     const platH = 16;
@@ -2617,6 +3456,8 @@ function drawMainMenu() {
     ctx.beginPath();
     ctx.ellipse(canvas.width / 2, platY + 2, shadowR, 4, 0, 0, Math.PI * 2);
     ctx.fill();
+
+    drawEquippedAura(ctx, charX, charY);
 
     ctx.fillStyle = userSkinColor;
     ctx.fillRect(charX, charY, player.width, player.height);
@@ -2785,7 +3626,6 @@ function draw() {
     const shakeY = (Math.random() - 0.5) * cameraShake;
     ctx.translate(shakeX, -cameraY + shakeY);
 
-    // --- ОТРИСОВКА ПЛАТФОРМ ---
     platforms.forEach(plat => {
         if (plat.destroyedByBlast) return;
         ctx.save();
@@ -2793,14 +3633,12 @@ function draw() {
         if (plat.type === 'crumb') {
             if (plat.falling) {
                 ctx.globalAlpha = Math.max(0, plat.alpha);
-                
                 const halfW = Math.round(plat.width / 2 - 3);
                 const gap = plat.splitOffset;
 
                 ctx.save();
                 ctx.translate(plat.x + halfW / 2 - gap, plat.y + plat.leftVy);
                 ctx.rotate(plat.leftAngle);
-                
                 ctx.fillStyle = '#16080a';
                 ctx.beginPath();
                 ctx.moveTo(-halfW / 2, -plat.height / 2);
@@ -2809,9 +3647,7 @@ function draw() {
                 ctx.lineTo(halfW / 2 + 1, plat.height / 6);
                 ctx.lineTo(halfW / 2 - 2, plat.height / 2);
                 ctx.lineTo(-halfW / 2, plat.height / 2);
-                ctx.closePath();
-                ctx.fill();
-
+                ctx.closePath(); ctx.fill();
                 ctx.fillStyle = '#ff2244';
                 ctx.fillRect(-halfW / 2, -plat.height / 2, halfW, 3);
                 ctx.restore();
@@ -2819,7 +3655,6 @@ function draw() {
                 ctx.save();
                 ctx.translate(plat.x + halfW + 6 + halfW / 2 + gap, plat.y + plat.rightVy);
                 ctx.rotate(plat.rightAngle);
-                
                 ctx.fillStyle = '#16080a';
                 ctx.beginPath();
                 ctx.moveTo(-halfW / 2, -plat.height / 2);
@@ -2828,9 +3663,7 @@ function draw() {
                 ctx.lineTo(-halfW / 2, plat.height / 2);
                 ctx.lineTo(-halfW / 2 - 2, plat.height / 6);
                 ctx.lineTo(-halfW / 2 + 2, -plat.height / 6);
-                ctx.closePath();
-                ctx.fill();
-
+                ctx.closePath(); ctx.fill();
                 ctx.fillStyle = '#ff2244';
                 ctx.fillRect(-halfW / 2, -plat.height / 2, halfW, 3);
                 ctx.restore();
@@ -2848,12 +3681,13 @@ function draw() {
             } else {
                 ctx.fillStyle = '#120810';
                 ctx.fillRect(plat.x, plat.y, plat.width, plat.height);
-
                 ctx.fillStyle = '#ff2244';
-                ctx.shadowBlur = 12; ctx.shadowColor = '#ff2244';
+                if (graphicsTier !== 'low') {
+                    ctx.shadowBlur = (graphicsTier === 'high') ? 16 : 12;
+                    ctx.shadowColor = '#ff2244';
+                }
                 ctx.fillRect(plat.x, plat.y, plat.width, 4);
                 ctx.shadowBlur = 0;
-
                 ctx.strokeStyle = '#ff7788';
                 ctx.lineWidth = 1.5;
                 ctx.beginPath();
@@ -2861,7 +3695,6 @@ function draw() {
                 ctx.lineTo(plat.x + plat.width * 0.52, plat.y + 9);
                 ctx.lineTo(plat.x + plat.width * 0.48, plat.y + 16);
                 ctx.stroke();
-
                 ctx.fillStyle = 'rgba(255, 34, 68, 0.4)';
                 ctx.fillRect(plat.x + 8, plat.y + 7, plat.width - 16, 3);
             }
@@ -2869,12 +3702,13 @@ function draw() {
         else if (plat.type === 'sticky') {
             ctx.fillStyle = '#06160c';
             ctx.fillRect(plat.x, plat.y, plat.width, plat.height);
-
             ctx.fillStyle = '#00ff66';
-            ctx.shadowBlur = 12; ctx.shadowColor = '#00ff66';
+            if (graphicsTier !== 'low') {
+                ctx.shadowBlur = (graphicsTier === 'high') ? 16 : 12;
+                ctx.shadowColor = '#00ff66';
+            }
             ctx.fillRect(plat.x, plat.y, plat.width, 4);
             ctx.shadowBlur = 0;
-
             const waveA = (Math.sin(animTicks * 0.12 + plat.x) + 1) * 2;
             const waveB = (Math.cos(animTicks * 0.12 + plat.x) + 1) * 2;
             ctx.fillStyle = '#00ff88';
@@ -2883,7 +3717,6 @@ function draw() {
             ctx.arc(plat.x + plat.width * 0.5, plat.y + 2 - waveB * 0.5, 3.5, 0, Math.PI * 2);
             ctx.arc(plat.x + plat.width * 0.75, plat.y + 2 - waveA * 0.5, 3, 0, Math.PI * 2);
             ctx.fill();
-
             ctx.fillStyle = 'rgba(0, 255, 102, 0.25)';
             for(let i = plat.x + 8; i < plat.x + plat.width - 6; i += 12) {
                 ctx.fillRect(i, plat.y + 6, 6, plat.height - 8);
@@ -2892,29 +3725,22 @@ function draw() {
         else if (plat.type === 'trap') {
             const isWarn = plat.trapActive && (animTicks % 16 < 8);
             const hazardColor = isWarn ? '#ff0033' : '#ffe600';
-
             ctx.fillStyle = isWarn ? '#24080a' : '#141406';
             ctx.fillRect(plat.x, plat.y, plat.width, plat.height);
-
             ctx.fillStyle = hazardColor;
-            ctx.shadowBlur = 10; ctx.shadowColor = hazardColor;
+            if (graphicsTier !== 'low') {
+                ctx.shadowBlur = (graphicsTier === 'high') ? 14 : 10;
+                ctx.shadowColor = hazardColor;
+            }
             ctx.fillRect(plat.x, plat.y, plat.width, 4);
             ctx.shadowBlur = 0;
-
             const coreCenterX = plat.x + plat.width / 2;
             const coreCenterY = plat.y + plat.height / 2 + 1;
             const pulseSize = (Math.sin(animTicks * 0.15) + 1) * 1.5;
-
             ctx.fillStyle = '#ffffff';
-            ctx.beginPath();
-            ctx.arc(coreCenterX, coreCenterY, 4.5 + pulseSize, 0, Math.PI * 2);
-            ctx.fill();
-
+            ctx.beginPath(); ctx.arc(coreCenterX, coreCenterY, 4.5 + pulseSize, 0, Math.PI * 2); ctx.fill();
             ctx.fillStyle = hazardColor;
-            ctx.beginPath();
-            ctx.arc(coreCenterX, coreCenterY, 3, 0, Math.PI * 2);
-            ctx.fill();
-
+            ctx.beginPath(); ctx.arc(coreCenterX, coreCenterY, 3, 0, Math.PI * 2); ctx.fill();
             ctx.fillStyle = 'rgba(255, 230, 0, 0.2)';
             ctx.fillRect(plat.x + 8, plat.y + 6, plat.width * 0.25, plat.height - 8);
             ctx.fillRect(plat.x + plat.width * 0.75 - 8, plat.y + 6, plat.width * 0.25, plat.height - 8);
@@ -2922,17 +3748,14 @@ function draw() {
             if (plat.trapActive) {
                 const qteX = player.x + player.width / 2;
                 const qteY = player.y - 25;
-                const progress = plat.trapTimer / 240;
-
+                const progress = plat.trapTimer / 120;
                 ctx.fillStyle = 'rgba(10, 10, 25, 0.88)';
                 ctx.strokeStyle = hazardColor;
                 ctx.lineWidth = 1.5;
                 ctx.strokeRect(qteX - 35, qteY - 14, 70, 18);
                 ctx.fillRect(qteX - 35, qteY - 14, 70, 18);
-
                 ctx.fillStyle = hazardColor;
                 ctx.fillRect(qteX - 33, qteY - 12, 66 * progress, 14);
-
                 ctx.font = '900 10px Orbitron';
                 ctx.fillStyle = '#ffffff';
                 ctx.textAlign = 'center';
@@ -2941,20 +3764,19 @@ function draw() {
         }
         else {
             let topColor = plat.type === 'moving' ? '#ff00bb' : '#00f0ff';
-
             ctx.fillStyle = '#10102b';
             ctx.fillRect(plat.x, plat.y, plat.width, plat.height);
-
             ctx.fillStyle = topColor;
-            ctx.shadowBlur = 10; ctx.shadowColor = topColor;
+            if (graphicsTier !== 'low') {
+                ctx.shadowBlur = (graphicsTier === 'high') ? 14 : 10;
+                ctx.shadowColor = topColor;
+            }
             ctx.fillRect(plat.x, plat.y, plat.width, 4);
             ctx.shadowBlur = 0;
-
             ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
             for(let i = plat.x + 8; i < plat.x + plat.width - 5; i += 18) {
                 ctx.fillRect(i, plat.y + 6, 2, plat.height - 8);
             }
-
             if (plat.type === 'normal') {
                 ctx.fillStyle = '#00f0ff';
                 ctx.globalAlpha = (Math.sin(animTicks * 0.1 + plat.x) + 1) * 0.5;
@@ -2975,47 +3797,77 @@ function draw() {
         ctx.restore();
     });
 
+    crystals.forEach(cr => {
+        if (cr.collected || cr.plat.destroyedByBlast) return;
+        const cx = cr.plat.x + cr.offsetX + 8;
+        const floatAnim = Math.sin(animTicks * 0.12 + cr.plat.x) * 4;
+        const cy = cr.plat.y - 14 + floatAnim;
+
+        ctx.save();
+        ctx.translate(cx, cy);
+        if (graphicsTier !== 'low') {
+            ctx.globalCompositeOperation = 'lighter';
+            const cGlow = ctx.createRadialGradient(0, 0, 1, 0, 0, 14);
+            cGlow.addColorStop(0, 'rgba(0, 240, 255, 0.7)');
+            cGlow.addColorStop(0.5, 'rgba(160, 0, 255, 0.3)');
+            cGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            ctx.fillStyle = cGlow;
+            ctx.beginPath(); ctx.arc(0, 0, 14, 0, Math.PI * 2); ctx.fill();
+            ctx.globalCompositeOperation = 'source-over';
+        }
+
+        ctx.beginPath();
+        ctx.moveTo(0, -9); ctx.lineTo(7, 0); ctx.lineTo(0, 9); ctx.lineTo(-7, 0); ctx.closePath();
+        ctx.fillStyle = '#00f0ff'; ctx.fill();
+
+        ctx.beginPath();
+        ctx.moveTo(0, -9); ctx.lineTo(7, 0); ctx.lineTo(0, 0); ctx.closePath();
+        ctx.fillStyle = '#ffffff'; ctx.fill();
+
+        ctx.beginPath();
+        ctx.moveTo(0, 9); ctx.lineTo(-7, 0); ctx.lineTo(0, 0); ctx.closePath();
+        ctx.fillStyle = '#0066cc'; ctx.fill();
+
+        ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1; ctx.stroke();
+        ctx.restore();
+    });
+
     shatteredPieces.forEach(sp => {
         ctx.save();
         ctx.translate(sp.x, sp.y);
         ctx.rotate(sp.angle);
         ctx.globalAlpha = Math.max(0, sp.alpha);
-
         ctx.fillStyle = '#161628';
         ctx.fillRect(-sp.w / 2, -sp.h / 2, sp.w, sp.h);
-
         ctx.fillStyle = sp.color;
         ctx.fillRect(-sp.w / 2, -sp.h / 2, sp.w, 3);
         ctx.restore();
     });
     ctx.globalAlpha = 1.0;
 
-    // Пружины
     springs.forEach(sp => {
         let compressionOffset = 0;
-        if (sp.animTimer > 0) {
-            compressionOffset = Math.sin(sp.animTimer * 0.4) * 6;
-        }
-
+        if (sp.animTimer > 0) compressionOffset = Math.sin(sp.animTimer * 0.4) * 6;
         ctx.fillStyle = '#3a3a5a';
         ctx.fillRect(sp.x, sp.y + sp.height - 4, sp.width, 4);
-
         const padY = sp.y + compressionOffset;
         ctx.fillStyle = '#ffff00';
-        ctx.shadowBlur = 12; ctx.shadowColor = '#ffff00';
+        if (graphicsTier !== 'low') {
+            ctx.shadowBlur = 12; ctx.shadowColor = '#ffff00';
+        }
         ctx.fillRect(sp.x, padY, sp.width, 4);
         ctx.shadowBlur = 0;
-
         ctx.fillStyle = '#7a7a9a';
         ctx.fillRect(sp.x + 4, padY + 4, sp.width - 8, 2);
         ctx.fillRect(sp.x + 4, padY + 8, sp.width - 8, 2);
     });
 
-    // Джетпаки
     powerups.forEach(pw => {
         if (!pw.collected) {
             ctx.fillStyle = '#ff0055';
-            ctx.shadowBlur = 14; ctx.shadowColor = '#ff0055';
+            if (graphicsTier !== 'low') {
+                ctx.shadowBlur = 14; ctx.shadowColor = '#ff0055';
+            }
             ctx.fillRect(pw.x, pw.y, pw.width, pw.height);
             ctx.fillStyle = '#ffff00';
             ctx.fillRect(pw.x + 7, pw.y + 4, 12, 18);
@@ -3023,13 +3875,11 @@ function draw() {
         }
     });
 
-    // Дроны
     enemies.forEach(e => {
         if (e.alive) {
             ctx.save();
             const hoverY = Math.sin(animTicks * 0.08 + e.x) * 3;
             ctx.translate(e.x + e.width / 2, e.y + e.height / 2 + hoverY);
-
             const wingFlap = Math.sin(e.wingAnim) * 3.5;
 
             ctx.fillStyle = '#100820';
@@ -3040,17 +3890,13 @@ function draw() {
             ctx.moveTo(-e.width/2 + 4, -4);
             ctx.lineTo(-e.width/2 - 10, -10 + wingFlap);
             ctx.lineTo(-e.width/2 - 2, 8 + wingFlap);
-            ctx.closePath();
-            ctx.fill();
-            ctx.stroke();
+            ctx.closePath(); ctx.fill(); ctx.stroke();
 
             ctx.beginPath();
             ctx.moveTo(e.width/2 - 4, -4);
             ctx.lineTo(e.width/2 + 10, -10 - wingFlap);
             ctx.lineTo(e.width/2 + 2, 8 - wingFlap);
-            ctx.closePath();
-            ctx.fill();
-            ctx.stroke();
+            ctx.closePath(); ctx.fill(); ctx.stroke();
 
             ctx.fillStyle = '#121424';
             ctx.strokeStyle = '#00f0ff';
@@ -3061,9 +3907,7 @@ function draw() {
             ctx.lineTo(e.width/2 - 6, e.height/2);
             ctx.lineTo(-e.width/2 + 6, e.height/2);
             ctx.lineTo(-e.width/2 + 4, -2);
-            ctx.closePath();
-            ctx.fill();
-            ctx.stroke();
+            ctx.closePath(); ctx.fill(); ctx.stroke();
 
             ctx.fillStyle = '#00f0ff';
             ctx.fillRect(-7, e.height/2 - 2, 4, 3);
@@ -3082,24 +3926,21 @@ function draw() {
         }
     });
 
-    // Ударные Волны
     shockwaves.forEach(sw => {
         ctx.strokeStyle = sw.color;
         ctx.lineWidth = 3;
         ctx.globalAlpha = sw.alpha;
-        ctx.beginPath();
-        ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
-        ctx.stroke();
+        ctx.beginPath(); ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2); ctx.stroke();
     });
     ctx.globalAlpha = 1.0;
 
-    // Пули
     ctx.fillStyle = '#ffff00';
-    ctx.shadowBlur = 10; ctx.shadowColor = '#ffff00';
+    if (graphicsTier !== 'low') {
+        ctx.shadowBlur = 10; ctx.shadowColor = '#ffff00';
+    }
     bullets.forEach(b => ctx.fillRect(b.x, b.y, b.width, b.height));
     ctx.shadowBlur = 0;
 
-    // Всплывающий Текст
     floatingTexts.forEach(ft => {
         ctx.font = '900 13px Orbitron';
         ctx.fillStyle = ft.color;
@@ -3108,7 +3949,6 @@ function draw() {
     });
     ctx.globalAlpha = 1.0;
 
-    // Шлейф Игрока
     player.trail.forEach(t => {
         ctx.fillStyle = devState.noclip ? 'rgba(0, 255, 136, 0.4)' : `rgba(0, 240, 255, ${t.alpha * 0.4})`;
         ctx.save();
@@ -3119,7 +3959,6 @@ function draw() {
         t.alpha -= 0.08;
     });
 
-    // Частицы
     particles.forEach(p => {
         ctx.fillStyle = p.color;
         ctx.globalAlpha = p.life;
@@ -3133,6 +3972,8 @@ function draw() {
     ctx.rotate(player.angle);
     ctx.scale(player.scaleX, player.scaleY);
 
+    drawEquippedAura(ctx, -player.width / 2, -player.height / 2);
+
     let playerColor = userSkinColor;
     if (devState.noclip) playerColor = '#00ff88';
     else if (devState.godmode) playerColor = '#ffff00';
@@ -3140,31 +3981,32 @@ function draw() {
     else if (player.jetpackTimer > 0) playerColor = '#ff0055';
 
     ctx.fillStyle = playerColor;
-    ctx.shadowBlur = 16; ctx.shadowColor = playerColor;
+    if (graphicsTier !== 'low') {
+        ctx.shadowBlur = (graphicsTier === 'high') ? 22 : 16;
+        ctx.shadowColor = playerColor;
+    }
     ctx.fillRect(-player.width / 2, -player.height / 2, player.width, player.height);
     ctx.shadowBlur = 0;
 
     drawCharacterEyes(ctx, -player.width / 2, -player.height / 2, player.vx < 0);
     drawEquippedHat(ctx, -player.width / 2, -player.height / 2);
 
-    // КИБЕРНЕТИЧЕСКИЙ ЩИТ НЕУЯЗВИМОСТИ (1 СЕКУНДА)
     if (player.invulnerableTimer > 0 && player.jetpackTimer <= 0) {
         ctx.save();
         const expireBlink = (player.invulnerableTimer < 25 && Math.floor(animTicks / 3) % 2 === 0) ? 0.2 : 1.0;
+        const shieldColor = '#00f0ff';
         const shieldPulse = Math.sin(animTicks * 0.15) * 2;
         const outerR = 30 + shieldPulse;
 
         const rotSpeedA = animTicks * 0.06;
         const rotSpeedB = -animTicks * 0.045;
 
-        ctx.strokeStyle = '#00f0ff';
+        ctx.strokeStyle = shieldColor;
         ctx.lineWidth = 1.8;
         ctx.globalAlpha = 0.75 * expireBlink;
         for (let i = 0; i < 3; i++) {
             const startAng = rotSpeedA + (i * Math.PI * 2) / 3;
-            ctx.beginPath();
-            ctx.arc(0, 0, outerR, startAng, startAng + 1.4);
-            ctx.stroke();
+            ctx.beginPath(); ctx.arc(0, 0, outerR, startAng, startAng + 1.4); ctx.stroke();
         }
 
         ctx.strokeStyle = '#00ff88';
@@ -3172,9 +4014,7 @@ function draw() {
         ctx.globalAlpha = 0.6 * expireBlink;
         for (let i = 0; i < 2; i++) {
             const startAng = rotSpeedB + (i * Math.PI * 2) / 2;
-            ctx.beginPath();
-            ctx.arc(0, 0, outerR - 5, startAng, startAng + 2.0);
-            ctx.stroke();
+            ctx.beginPath(); ctx.arc(0, 0, outerR - 5, startAng, startAng + 2.0); ctx.stroke();
         }
 
         ctx.strokeStyle = '#ffffff';
@@ -3182,17 +4022,10 @@ function draw() {
         ctx.globalAlpha = 0.85 * expireBlink;
         const bDist = outerR + 2;
         ctx.beginPath();
-        ctx.moveTo(-bDist + 4, -8);
-        ctx.lineTo(-bDist, -8);
-        ctx.lineTo(-bDist, 8);
-        ctx.lineTo(-bDist + 4, 8);
+        ctx.moveTo(-bDist + 4, -8); ctx.lineTo(-bDist, -8); ctx.lineTo(-bDist, 8); ctx.lineTo(-bDist + 4, 8);
         ctx.stroke();
-
         ctx.beginPath();
-        ctx.moveTo(bDist - 4, -8);
-        ctx.lineTo(bDist, -8);
-        ctx.lineTo(bDist, 8);
-        ctx.lineTo(bDist - 4, 8);
+        ctx.moveTo(bDist - 4, -8); ctx.lineTo(bDist, -8); ctx.lineTo(bDist, 8); ctx.lineTo(bDist - 4, 8);
         ctx.stroke();
 
         ctx.fillStyle = 'rgba(0, 240, 255, 0.12)';
@@ -3207,9 +4040,7 @@ function draw() {
             if (i === 0) ctx.moveTo(hx, hy);
             else ctx.lineTo(hx, hy);
         }
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
+        ctx.closePath(); ctx.fill(); ctx.stroke();
 
         ctx.restore();
     }
@@ -3229,6 +4060,7 @@ resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
 setupInput();
 initCustomizationUI();
+initSettingsUI();
 loop();
 </script>
 </body>
