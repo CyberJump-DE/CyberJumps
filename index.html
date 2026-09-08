@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Cyber Jump: Авторизация и Синхронизация</title>
+    <title>Cyber Jump: Авторизация и Облачная Синхронизация</title>
     <!-- Официальная библиотека Google Identity Services -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
@@ -184,14 +184,37 @@
             text-transform: uppercase;
         }
 
-        .google-btn-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 48px;
-            margin: 0 auto;
+        .google-auth-btn-custom {
+            position: relative;
             width: 100%;
-            filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.6));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            background: linear-gradient(145deg, #0d1124 0%, #05070e 100%);
+            border: 1.5px solid rgba(0, 240, 255, 0.45);
+            border-radius: 12px;
+            padding: 15px 18px;
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 1.6px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.25s ease;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
+            touch-action: manipulation;
+        }
+        .google-auth-btn-custom:hover {
+            border-color: #00f0ff;
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        .google-icon {
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0;
         }
 
         .terminal-log {
@@ -279,19 +302,27 @@
             <div class="system-status-bar">
                 <div class="status-indicator">
                     <div class="status-dot"></div>
-                    <span id="syncNetStatus">СЕТЬ АКТИВНА</span>
+                    <span id="syncNetStatus">ОБЛАКО ГОТОВО</span>
                 </div>
-                <div class="system-code">CLOUD_SYNC // v2.026</div>
+                <div class="system-code">GOOGLE_DRIVE_SYNC</div>
             </div>
 
             <h1>ВХОД В АККАУНТ</h1>
-            <div class="subtitle">СИНХРОНИЗАЦИЯ РЕКОРДОВ И ПРОГРЕССА</div>
+            <div class="subtitle">СИНХРОНИЗАЦИЯ МЕЖДУ ПК И ТЕЛЕФОНОМ</div>
 
-            <!-- Официальная кнопка Google -->
-            <div class="google-btn-wrapper" id="googleBtnSlot"></div>
+            <!-- Кнопка входа Google с запросом доступа к Drive -->
+            <button class="google-auth-btn-custom" id="btnGoogleAuth" onclick="handleGoogleSignIn()">
+                <svg class="google-icon" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+                    <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+                    <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+                    <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+                </svg>
+                ВОЙТИ ЧЕРЕЗ GOOGLE
+            </button>
 
             <div class="terminal-log" id="terminalStatus">
-                Инициализация модуля авторизации и синхронизации...
+                Ожидание авторизации пилота...
             </div>
 
             <div class="auth-footer-links">
@@ -302,14 +333,11 @@
     </div>
 
 <script>
-// ==========================================================
-// КОНФИГУРАЦИЯ И КЛИЕНТ GOOGLE OAUTH
-// ==========================================================
 const GOOGLE_CLIENT_ID = '706751433805-1r56qodllbmsqcg6hfcs8kk99vrgio34.apps.googleusercontent.com';
+let googleTokenClient = null;
 const terminalEl = document.getElementById('terminalStatus');
 const syncNetStatusEl = document.getElementById('syncNetStatus');
 
-// --- ЗВУКОВОЙ ДВИЖОК ---
 let audioCtx = null;
 function playSound(type) {
     try {
@@ -341,13 +369,74 @@ function playSound(type) {
     } catch(e) {}
 }
 
-// ==========================================================
-// МОДУЛЬ СИНХРОНИЗАЦИИ ПРОГРЕССА (CLOUDSYNC MANAGER)
-// ==========================================================
-const CloudSyncManager = {
-    // Собирает текущее состояние игры с устройства
-    getLocalSnapshot() {
-        return {
+// --- УМНОЕ ОБЪЕДИНЕНИЕ ДАННЫХ (LOCAL + GOOGLE DRIVE CLOUD) ---
+function mergeSnapshots(local, cloud) {
+    if (!cloud) return local;
+    return {
+        crystals: Math.max(local.crystals || 0, cloud.crystals || 0),
+        highScore: Math.max(local.highScore || 0, cloud.highScore || 0),
+        unlockedHats: Array.from(new Set([...(local.unlockedHats || []), ...(cloud.unlockedHats || [])])),
+        unlockedEyes: Array.from(new Set([...(local.unlockedEyes || []), ...(cloud.unlockedEyes || [])])),
+        unlockedAuras: Array.from(new Set([...(local.unlockedAuras || []), ...(cloud.unlockedAuras || [])])),
+        equippedHat: cloud.equippedHat || local.equippedHat || 'none',
+        equippedEye: cloud.equippedEye || local.equippedEye || 'default',
+        equippedAura: cloud.equippedAura || local.equippedAura || 'none',
+        equippedColor: cloud.equippedColor || local.equippedColor || '#00f0ff',
+        audioSettings: cloud.audioSettings || local.audioSettings,
+        graphicsTier: cloud.graphicsTier || local.graphicsTier || 'medium',
+        customBinds: cloud.customBinds || local.customBinds
+    };
+}
+
+function applySnapshot(data) {
+    if (!data) return;
+    if (data.crystals !== undefined) localStorage.setItem('cyber_jump_crystals', data.crystals);
+    if (data.highScore !== undefined) localStorage.setItem('cyber_jump_hs', data.highScore);
+    if (data.unlockedHats) localStorage.setItem('cyber_jump_unlocked_hats', JSON.stringify(data.unlockedHats));
+    if (data.unlockedEyes) localStorage.setItem('cyber_jump_unlocked_eyes', JSON.stringify(data.unlockedEyes));
+    if (data.unlockedAuras) localStorage.setItem('cyber_jump_unlocked_auras', JSON.stringify(data.unlockedAuras));
+    if (data.equippedHat) localStorage.setItem('cyber_jump_hat', data.equippedHat);
+    if (data.equippedEye) localStorage.setItem('cyber_jump_eye', data.equippedEye);
+    if (data.equippedAura) localStorage.setItem('cyber_jump_aura', data.equippedAura);
+    if (data.equippedColor) localStorage.setItem('cyber_jump_color', data.equippedColor);
+    if (data.audioSettings) localStorage.setItem('cyber_jump_audio_settings', JSON.stringify(data.audioSettings));
+    if (data.graphicsTier) localStorage.setItem('cyber_jump_graphics_tier', data.graphicsTier);
+    if (data.customBinds) localStorage.setItem('cyber_jump_binds', JSON.stringify(data.customBinds));
+}
+
+// --- СИНХРОНИЗАЦИЯ ЧЕРЕЗ GOOGLE DRIVE API ---
+async function syncWithGoogleDrive(accessToken) {
+    terminalEl.style.color = '#ffd700';
+    terminalEl.innerText = 'ПОДКЛЮЧЕНИЕ К GOOGLE DRIVE...';
+
+    try {
+        // 1. Профиль
+        const profileRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+            headers: { Authorization: `Bearer ${accessToken}` }
+        });
+        const profile = await profileRes.json();
+
+        // 2. Ищем файл сохранения в диске
+        const searchRes = await fetch("https://www.googleapis.com/drive/v3/files?q=name='cyber_jump_save_v1.json' and trashed=false", {
+            headers: { Authorization: `Bearer ${accessToken}` }
+        });
+        const searchData = await searchRes.json();
+
+        let cloudData = null;
+        let fileId = null;
+
+        if (searchData.files && searchData.files.length > 0) {
+            fileId = searchData.files[0].id;
+            const fileRes = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, {
+                headers: { Authorization: `Bearer ${accessToken}` }
+            });
+            if (fileRes.ok) {
+                cloudData = await fileRes.json();
+            }
+        }
+
+        // 3. Локальные данные
+        const localSnap = {
             crystals: parseInt(localStorage.getItem('cyber_jump_crystals') || '0', 10),
             highScore: parseInt(localStorage.getItem('cyber_jump_hs') || '0', 10),
             unlockedHats: JSON.parse(localStorage.getItem('cyber_jump_unlocked_hats') || '["none","crown"]'),
@@ -359,203 +448,119 @@ const CloudSyncManager = {
             equippedColor: localStorage.getItem('cyber_jump_color') || '#00f0ff',
             audioSettings: JSON.parse(localStorage.getItem('cyber_jump_audio_settings') || '{"master":80,"sfx":90,"synth":70,"ui":85}'),
             graphicsTier: localStorage.getItem('cyber_jump_graphics_tier') || 'medium',
-            customBinds: JSON.parse(localStorage.getItem('cyber_jump_binds') || '{"left":"KeyA","right":"KeyD","shoot":"KeyE","trap":"Space"}'),
-            lastSaved: parseInt(localStorage.getItem('cyber_jump_last_save') || '0', 10)
+            customBinds: JSON.parse(localStorage.getItem('cyber_jump_binds') || '{"left":"KeyA","right":"KeyD","shoot":"KeyE","trap":"Space"}')
         };
-    },
 
-    // Применяет снимок в активные ключи игры для game.html
-    applySnapshot(data) {
-        if (!data) return;
-        if (data.crystals !== undefined) localStorage.setItem('cyber_jump_crystals', data.crystals);
-        if (data.highScore !== undefined) localStorage.setItem('cyber_jump_hs', data.highScore);
-        if (data.unlockedHats) localStorage.setItem('cyber_jump_unlocked_hats', JSON.stringify(data.unlockedHats));
-        if (data.unlockedEyes) localStorage.setItem('cyber_jump_unlocked_eyes', JSON.stringify(data.unlockedEyes));
-        if (data.unlockedAuras) localStorage.setItem('cyber_jump_unlocked_auras', JSON.stringify(data.unlockedAuras));
-        if (data.equippedHat) localStorage.setItem('cyber_jump_hat', data.equippedHat);
-        if (data.equippedEye) localStorage.setItem('cyber_jump_eye', data.equippedEye);
-        if (data.equippedAura) localStorage.setItem('cyber_jump_aura', data.equippedAura);
-        if (data.equippedColor) localStorage.setItem('cyber_jump_color', data.equippedColor);
-        if (data.audioSettings) localStorage.setItem('cyber_jump_audio_settings', JSON.stringify(data.audioSettings));
-        if (data.graphicsTier) localStorage.setItem('cyber_jump_graphics_tier', data.graphicsTier);
-        if (data.customBinds) localStorage.setItem('cyber_jump_binds', JSON.stringify(data.customBinds));
-        localStorage.setItem('cyber_jump_last_save', Date.now());
-    },
+        // 4. Объединение
+        const merged = mergeSnapshots(localSnap, cloudData);
+        applySnapshot(merged);
 
-    // Умное объединение двух сохранений без потери предметов и кристаллов
-    mergeSnapshots(localData, cloudData) {
-        if (!cloudData) return localData;
-        return {
-            crystals: Math.max(localData.crystals || 0, cloudData.crystals || 0),
-            highScore: Math.max(localData.highScore || 0, cloudData.highScore || 0),
-            unlockedHats: Array.from(new Set([...(localData.unlockedHats || []), ...(cloudData.unlockedHats || [])])),
-            unlockedEyes: Array.from(new Set([...(localData.unlockedEyes || []), ...(cloudData.unlockedEyes || [])])),
-            unlockedAuras: Array.from(new Set([...(localData.unlockedAuras || []), ...(cloudData.unlockedAuras || [])])),
-            equippedHat: cloudData.equippedHat || localData.equippedHat || 'none',
-            equippedEye: cloudData.equippedEye || localData.equippedEye || 'default',
-            equippedAura: cloudData.equippedAura || localData.equippedAura || 'none',
-            equippedColor: cloudData.equippedColor || localData.equippedColor || '#00f0ff',
-            audioSettings: cloudData.audioSettings || localData.audioSettings,
-            graphicsTier: cloudData.graphicsTier || localData.graphicsTier || 'medium',
-            customBinds: cloudData.customBinds || localData.customBinds,
-            lastSaved: Date.now()
-        };
-    },
+        // 5. Загружаем обновленный файл обратно в Google Drive
+        const fileMetadata = { name: 'cyber_jump_save_v1.json', mimeType: 'application/json' };
+        const fileContent = JSON.stringify(merged);
 
-    // Получает облачный профиль пользователя по уникальному Google Sub ID
-    async fetchCloudProfile(userId) {
-        const cloudKey = `cyber_jump_cloud_profile_${userId}`;
-        const stored = localStorage.getItem(cloudKey);
-        if (stored) {
-            try {
-                return JSON.parse(stored);
-            } catch(e) {
-                return null;
-            }
+        if (fileId) {
+            await fetch(`https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`, {
+                method: 'PATCH',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: fileContent
+            });
+        } else {
+            const form = new FormData();
+            form.append('metadata', new Blob([JSON.stringify(fileMetadata)], { type: 'application/json' }));
+            form.append('file', new Blob([fileContent], { type: 'application/json' }));
+
+            await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${accessToken}` },
+                body: form
+            });
         }
-        return null;
-    },
 
-    // Записывает актуальный слепок в изолированное хранилище аккаунта
-    async pushCloudProfile(userId, mergedData) {
-        const cloudKey = `cyber_jump_cloud_profile_${userId}`;
-        localStorage.setItem(cloudKey, JSON.stringify(mergedData));
-    },
-
-    // Полный цикл синхронизации при входе
-    async syncUserAccount(profile) {
-        const userId = profile.sub || profile.id;
-        terminalEl.style.color = '#ffd700';
-        terminalEl.innerText = `ПОДКЛЮЧЕНИЕ К ОБЛАКУ ДЛЯ [${profile.name || 'USER'}]...`;
-
-        // 1. Читаем локальное и облачное состояние
-        const localSnap = this.getLocalSnapshot();
-        const cloudSnap = await this.fetchCloudProfile(userId);
-
-        // 2. Объединяем прогресс (вещи, рекорды, валюту)
-        const mergedSnap = this.mergeSnapshots(localSnap, cloudSnap);
-
-        // 3. Сохраняем в облачный профиль и в активную память игры
-        await this.pushCloudProfile(userId, mergedSnap);
-        this.applySnapshot(mergedSnap);
-
-        // 4. Записываем профиль авторизованного игрока
-        const activeUser = {
-            name: profile.name || profile.email || 'Пилот',
+        const userData = {
+            name: profile.name || 'Пилот',
             email: profile.email || '',
             picture: profile.picture || '',
-            sub: userId,
-            authType: 'google',
-            syncedAt: Date.now()
+            sub: profile.sub,
+            authType: 'google'
         };
-        localStorage.setItem('cyber_jump_user', JSON.stringify(activeUser));
+        localStorage.setItem('cyber_jump_user', JSON.stringify(userData));
 
-        const totalItems = (mergedSnap.unlockedHats.length - 1) + (mergedSnap.unlockedEyes.length - 1) + (mergedSnap.unlockedAuras.length - 1);
-        return {
-            crystals: mergedSnap.crystals,
-            highScore: mergedSnap.highScore,
-            itemsCount: Math.max(0, totalItems)
-        };
+        playSound('auth');
+        terminalEl.style.color = '#00ff88';
+        terminalEl.innerText = `СИНХРОНИЗАЦИЯ УСПЕШНА: ${profile.name.toUpperCase()} // 💎 ${merged.crystals} | 🏆 ${merged.highScore}M`;
+        if (syncNetStatusEl) {
+            syncNetStatusEl.innerText = 'ОБЛАКО: СИНХРОНИЗИРОВАНО';
+            syncNetStatusEl.style.color = '#00ff88';
+        }
+
+        setTimeout(() => {
+            window.location.href = 'game.html';
+        }, 700);
+
+    } catch (err) {
+        terminalEl.style.color = '#ff4d6d';
+        terminalEl.innerText = `ОШИБКА ДАЙВА: ${err.message}. Переход с локальными данными...`;
+        setTimeout(() => {
+            window.location.href = 'game.html';
+        }, 900);
     }
-};
+}
 
-// Расшифровка JWT токена Google
-function parseJwt(token) {
+function initGoogleTokenClient() {
     try {
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
-        return JSON.parse(jsonPayload);
-    } catch (e) {
-        return null;
-    }
-}
-
-// Колбэк от Google Identity Services
-async function handleCredentialResponse(response) {
-    if (response && response.credential) {
-        terminalEl.style.color = '#ffd700';
-        terminalEl.innerText = 'ТОКЕН ПРИНЯТ. ПРОВЕРКА ОБЛАЧНОГО СЛЕПКА...';
-
-        const profile = parseJwt(response.credential);
-        if (profile) {
-            try {
-                // Запуск полной синхронизации прогресса
-                const syncSummary = await CloudSyncManager.syncUserAccount(profile);
-
-                playSound('auth');
-                terminalEl.style.color = '#00ff88';
-                terminalEl.innerText = `УСПЕШНО: ${profile.name.toUpperCase()} // 💎 ${syncSummary.crystals} | 🏆 ${syncSummary.highScore}M | ВЕЩЕЙ: ${syncSummary.itemsCount}`;
-
-                if (syncNetStatusEl) {
-                    syncNetStatusEl.innerText = 'ОБЛАКО: СИНХРОНИЗИРОВАНО';
-                    syncNetStatusEl.style.color = '#00ff88';
-                }
-
-                setTimeout(() => {
-                    window.location.href = 'game.html';
-                }, 750);
-            } catch (err) {
-                terminalEl.style.color = '#ff4d6d';
-                terminalEl.innerText = 'ОШИБКА СИНХРОНИЗАЦИИ ПРОГРЕССА: ПЕРЕХОД С ЛОКАЛЬНЫМИ ДАННЫМИ...';
-                setTimeout(() => {
-                    window.location.href = 'game.html';
-                }, 800);
-            }
-        } else {
-            terminalEl.style.color = '#ff4d6d';
-            terminalEl.innerText = 'СБОЙ ДЕШИФРОВКИ ДАННЫХ УЧЕТНОЙ ЗАПИСИ';
-        }
-    }
-}
-
-function initGoogleAuth() {
-    if (window.google && google.accounts && google.accounts.id) {
-        try {
-            google.accounts.id.initialize({
+        if (window.google && google.accounts && google.accounts.oauth2) {
+            googleTokenClient = google.accounts.oauth2.initTokenClient({
                 client_id: GOOGLE_CLIENT_ID,
-                callback: handleCredentialResponse,
-                auto_select: false,
-                itp_support: true
+                scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive.file',
+                callback: async (tokenResponse) => {
+                    if (tokenResponse && tokenResponse.access_token) {
+                        await syncWithGoogleDrive(tokenResponse.access_token);
+                    }
+                },
+                error_callback: (err) => {
+                    terminalEl.style.color = '#ff4d6d';
+                    terminalEl.innerText = `ОШИБКА GOOGLE: ${err.type || 'Окно закрыто'}`;
+                }
             });
-
-            const btnSlot = document.getElementById("googleBtnSlot");
-            btnSlot.innerHTML = '';
-            google.accounts.id.renderButton(btnSlot, {
-                theme: "filled_black",
-                size: "large",
-                width: 320,
-                shape: "rectangular",
-                text: "signin_with",
-                logo_alignment: "left"
-            });
-
             terminalEl.style.color = '#00ff88';
-            terminalEl.innerText = 'ШЛЮЗ ГОТОВ: ОЖИДАНИЕ ВХОДА И СИНХРОНИЗАЦИИ...';
-        } catch (err) {
-            terminalEl.style.color = '#ffaa00';
-            terminalEl.innerText = 'ОШИБКА ИНИЦИАЛИЗАЦИИ: ПРОВЕРЬТЕ НАСТРОЙКИ В GOOGLE CONSOLE';
+            terminalEl.innerText = 'ШЛЮЗ ГОТОВ: НАЖМИТЕ ДЛЯ СИНХРОНИЗАЦИИ';
         }
-    }
+    } catch(e) {}
 }
 
 window.addEventListener('load', () => {
-    initGoogleAuth();
-    const retry = setInterval(() => {
-        if (window.google && google.accounts && google.accounts.id) {
-            clearInterval(retry);
-            initGoogleAuth();
-        }
-    }, 250);
+    initGoogleTokenClient();
+    setTimeout(initGoogleTokenClient, 1000);
 });
 
-// ГОСТЕВОЙ ВХОД (НЕ СБИВАЕТ ОБЛАЧНЫЙ ПРОФИЛЬ)
+function handleGoogleSignIn() {
+    playSound('beep');
+    if (!googleTokenClient) {
+        initGoogleTokenClient();
+    }
+    if (!googleTokenClient) {
+        terminalEl.style.color = '#ff4d6d';
+        terminalEl.innerText = 'МОДУЛЬ GOOGLE НЕДОСТУПЕН. ПРОВЕРЬТЕ ИНТЕРНЕТ';
+        return;
+    }
+    terminalEl.style.color = '#00f0ff';
+    terminalEl.innerText = 'ОТКРЫТИЕ ОКНА ДОСТУПА GOOGLE DRIVE...';
+    try {
+        googleTokenClient.requestAccessToken({ prompt: 'consent' });
+    } catch(err) {
+        terminalEl.style.color = '#ff4d6d';
+        terminalEl.innerText = 'ВСПЛЫВАЮЩЕЕ ОКНО ЗАБЛОКИРОВАНО БРАУЗЕРОМ';
+    }
+}
+
 function guestSignIn() {
     playSound('beep');
     terminalEl.style.color = '#00f0ff';
-    terminalEl.innerText = 'ВХОД В РЕЖИМЕ ГОСТЯ [ЛОКАЛЬНЫЙ ПРОФИЛЬ]...';
+    terminalEl.innerText = 'ВХОД БЕЗ СИНХРОНИЗАЦИИ [ЛОКАЛЬНЫЙ РЕЖИМ]...';
 
     localStorage.setItem('cyber_jump_user', JSON.stringify({
         name: 'Гость',
@@ -570,7 +575,7 @@ function guestSignIn() {
 function serverStatus() {
     playSound('beep');
     terminalEl.style.color = '#00ff88';
-    terminalEl.innerText = `СЕТЬ: ОНЛАЙН [${window.location.host || 'GITHUB_PAGES'}] // CLOUD_SYNC OK`;
+    terminalEl.innerText = `СЕТЬ: ОНЛАЙН [ДАТА-ЦЕНТР DRIVE] // ПИНГ: 14ms`;
 }
 
 // ==========================================================
@@ -605,7 +610,6 @@ function initCosmos() {
     }
 }
 
-// Сатурн
 function drawSaturn(sx, sy, radius) {
     ctx.save();
     ctx.translate(sx, sy);
@@ -634,7 +638,6 @@ function drawSaturn(sx, sy, radius) {
     ctx.restore();
 }
 
-// Черная дыра
 function drawBlackHole(bx, by, radius) {
     ctx.save();
     ctx.translate(bx, by);
@@ -703,7 +706,6 @@ function renderCosmos() {
     ctx.fillStyle = bgGrad;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Туманности
     ctx.globalCompositeOperation = 'lighter';
     const nebulae = [
         { x: canvas.width * 0.22, y: canvas.height * 0.22, r: 240, col: 'rgba(0, 240, 255, ' },
@@ -719,7 +721,6 @@ function renderCosmos() {
         ctx.fill();
     });
 
-    // Гигантские светила с коронами
     const spacedStars = [
         { x: canvas.width * 0.14, y: canvas.height * 0.34, r: 24, core: '#ffffff', corona: 'rgba(0, 240, 255, 0.45)', speed: 0.03 },
         { x: canvas.width * 0.86, y: canvas.height * 0.14, r: 28, core: '#fff4b8', corona: 'rgba(255, 0, 119, 0.40)', speed: 0.025 }
@@ -748,19 +749,16 @@ function renderCosmos() {
     });
     ctx.globalCompositeOperation = 'source-over';
 
-    // Звезды
     stars.forEach(st => {
         ctx.fillStyle = st.color;
-        ctx.globalAlpha = st.alpha * (0.8 + Math.sin(animTicks * st.blinkSpeed) * 0.25);
+        ctx.globalAlpha = st.alpha * (0.8 + Math.sin(animTicks * st.blinkSpeed) * 0.2);
         ctx.fillRect(st.x, st.y, st.size, st.size);
     });
     ctx.globalAlpha = 1.0;
 
-    // Сатурн (справа) и Черная Дыра (слева)
     drawSaturn(canvas.width * 0.82, canvas.height * 0.24, 52);
     drawBlackHole(canvas.width * 0.24, canvas.height * 0.25, 26);
 
-    // Кометы
     if (Math.random() < 0.02) {
         meteors.push({
             x: Math.random() * canvas.width * 1.2 - 50,
